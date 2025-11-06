@@ -1,0 +1,52 @@
+npx create-next-app@latest my-portfolio --typescript --tailwind
+cd my-portfolio
+
+
+my-portfolio/
+│
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── globals.css
+│   └── sections/
+│       ├── Hero.tsx
+│       ├── About.tsx
+│       ├── Skills.tsx
+│       ├── Projects.tsx
+│       ├── Testimony.tsx
+│       ├── Contact.tsx
+│
+├── components/
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   ├── SkillCard.tsx
+│   ├── ProjectCard.tsx
+│   ├── TestimonialCard.tsx
+│
+├── lib/
+│   ├── data.ts        # Static data for skills, projects, testimonials
+│   └── animations.ts  # Animation variants and motion configs
+│
+├── public/
+│   ├── images/
+│   └── icons/
+│
+└── tailwind.config.ts
+
+| Section          | Library             | Animation Type         | Description                                |
+| ---------------- | ------------------- | ---------------------- | ------------------------------------------ |
+| **Navbar**       | Framer Motion       | Slide-in / fade        | Navbar appears smoothly on mount           |
+| **Hero Section** | Framer Motion       | Staggered fade-up      | Text and image animate with a delay        |
+| **About Me**     | AOS / Framer Motion | Fade-left / Fade-right | Subtle entrance when scrolled into view    |
+| **Skills**       | Framer Motion       | Scale-up               | Each skill card animates on viewport entry |
+| **Projects**     | Framer Motion       | Slide-up               | Projects appear dynamically as you scroll  |
+| **Testimonials** | AOS / Framer Motion | Fade-in / Slide-left   | Each testimony enters with timing          |
+| **Contact Form** | Framer Motion       | Fade-up                | Smooth input and button animations         |
+| **Footer**       | Framer Motion       | Fade-in from bottom    | Clean finish animation                     |
+
+| Screen Size | Prefix | Width    |
+| ----------- | ------ | -------- |
+| **sm**      | `sm:`  | ≥ 640px  |
+| **md**      | `md:`  | ≥ 768px  |
+| **lg**      | `lg:`  | ≥ 1024px |
+| **xl**      | `xl:`  | ≥ 1280px |

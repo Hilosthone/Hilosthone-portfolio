@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import hpayImage from '../public/hpayImage.jpg'
 import twitterClone from '../public/TwitterClone.png'
 import colourGenerator from '../public/colourGenerator.png'
 import tCampusCloset from '../public/tCampusCloset.png'
@@ -9,6 +10,14 @@ export default function Projects() {
   const projects = [
     {
       id: '01',
+      title: 'Hpay — Hilosthone Pay',
+      description:
+        'A fintech web app clone of Opay, built with Next.js, TypeScript, and Tailwind CSS. It features wallet funding, transfers, transaction history, dark mode, and a responsive UI.',
+      image: hpayImage,
+      link: 'https://hpay-hilosthone.netlify.app/',
+    },
+    {
+      id: '02',
       title: 'Twitter Clone Application',
       description:
         'A Twitter clone built with Next.js, Tailwind CSS, and TypeScript. It features user authentication, real-time updates, and a fully responsive design.',
@@ -16,7 +25,7 @@ export default function Projects() {
       link: 'https://twitterclonebyhilosthone.netlify.app/',
     },
     {
-      id: '02',
+      id: '03',
       title: "T's Campus Closet",
       description:
         'A stylish online closet app built with React and Tailwind CSS, showcasing modern design and responsive layouts.',
@@ -24,7 +33,7 @@ export default function Projects() {
       link: 'https://t-campus-closet-dem-osite.netlify.app/',
     },
     {
-      id: '03',
+      id: '04',
       title: 'Color Generator',
       description:
         'A color palette generator built with React. It allows users to create, copy, and explore beautiful color schemes easily.',

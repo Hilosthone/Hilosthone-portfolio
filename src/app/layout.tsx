@@ -13,7 +13,10 @@ export const metadata = {
   title: 'Hilosthone | Full-Stack Software Engineer',
   description:
     'Creative Full-Stack Software Engineer specializing in building high-performance web applications with Next.js, TypeScript, and Tailwind CSS. Explore my portfolio of modern digital solutions.',
-  metadataBase: new URL('https://hilosthone.com'), // IMPORTANT: Change to your actual domain
+
+  // FIXED: Point this to your actual Netlify URL
+  metadataBase: new URL('https://hilosthone-portfolio.netlify.app'),
+
   icons: {
     icon: '/Hilosthone.jpeg',
     apple: '/Hilosthone.jpeg',
@@ -22,11 +25,11 @@ export const metadata = {
     title: 'Hilosthone | Full-Stack Software Engineer',
     description:
       'Building modern, scalable web apps with Next.js and Tailwind CSS. Check out my latest projects and skills.',
-    url: 'https://hilosthone.com',
+    url: 'https://hilosthone-portfolio.netlify.app',
     siteName: 'Hilosthone Portfolio',
     images: [
       {
-        url: '/HilosthoneMetaImage.png',
+        url: '/Hilosthone.png',
         width: 1200,
         height: 630,
         alt: 'Hilosthone Portfolio Preview',
@@ -40,7 +43,7 @@ export const metadata = {
     title: 'Hilosthone | Full-Stack Software Engineer',
     description:
       'Creative Full-Stack Developer specializing in Next.js and Tailwind CSS.',
-    images: ['/HilosthoneMetaImage.png'],
+    images: ['/Hilosthone.png'],
   },
 }
 

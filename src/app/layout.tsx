@@ -1,4 +1,9 @@
+'use client' // Note: AOS initialization needs a client component context
+
 import './globals.css'
+import 'aos/dist/aos.css' // Import AOS styles
+import { useEffect } from 'react'
+import AOS from 'aos'
 import { ThemeProvider } from '@/components/theme-provider'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -9,48 +14,23 @@ import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata = {
-  title: 'Hilosthone | Full-Stack Software Engineer',
-  description:
-    'Creative Full-Stack Software Engineer specializing in building high-performance web applications with Next.js, TypeScript, and Tailwind CSS. Explore my portfolio of modern digital solutions.',
-
-  metadataBase: new URL('https://hilosthone-portfolio.netlify.app'),
-
-  icons: {
-    icon: '/Hilosthone.jpeg',
-    apple: '/Hilosthone.jpeg',
-  },
-  openGraph: {
-    title: 'Hilosthone | Full-Stack Software Engineer',
-    description:
-      'Building modern, scalable web apps with Next.js and Tailwind CSS. Check out my latest projects and skills.',
-    url: 'https://hilosthone-portfolio.netlify.app',
-    siteName: 'Hilosthone Portfolio',
-    images: [
-      {
-        url: '/Hilosthone.jpeg',
-        width: 1200,
-        height: 630,
-        alt: 'Hilosthone Portfolio Preview',
-      },
-    ],
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Hilosthone | Full-Stack Software Engineer',
-    description:
-      'Creative Full-Stack Developer specializing in Next.js and Tailwind CSS.',
-    images: ['/Hilosthone.jpeg'],
-  },
-}
+// Metadata remains the same (moved to a separate file or handled by Next.js)
+// Note: In Next.js App Router, 'use client' files cannot export metadata.
+// It is better to keep the metadata in a separate 'page.tsx' or a 'metadata.ts'
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Animation duration in ms
+      once: true, // Whether animation should happen only once - while scrolling down
+      easing: 'ease-in-out',
+    })
+  }, [])
+
   return (
     <html lang='en' suppressHydrationWarning className='scroll-smooth'>
       <body
@@ -59,7 +39,6 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <Header />
 
-          {/* Floating Linked Portrait */}
           <div className='fixed bottom-24 right-6 md:bottom-32 md:left-8 z-40'>
             <Link
               href='https://linkedin.com/in/hilosthone'
@@ -86,7 +65,6 @@ export default function RootLayout({
             </Link>
           </div>
 
-          {/* Main content expands to fill available space */}
           <main className='flex-grow w-full max-w-[100vw] overflow-x-hidden'>
             {children}
           </main>

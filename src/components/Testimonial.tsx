@@ -45,104 +45,147 @@ const testimonials = [
 
 export default function TestimonialCarousel() {
   const [current, setCurrent] = useState(0)
+  const [direction, setDirection] = useState(0)
 
   useEffect(() => {
     const timer = setInterval(() => {
+      setDirection(1)
       setCurrent((prev) => (prev + 1) % testimonials.length)
-    }, 8000)
+    }, 10000)
     return () => clearInterval(timer)
   }, [])
 
-  const nextSlide = () => setCurrent((prev) => (prev + 1) % testimonials.length)
-  const prevSlide = () =>
+  const nextSlide = () => {
+    setDirection(1)
+    setCurrent((prev) => (prev + 1) % testimonials.length)
+  }
+  const prevSlide = () => {
+    setDirection(-1)
     setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
+
+  // Animation Variants for the Slide
+  const slideVariants = {
+    initial: (direction: number) => ({
+      x: direction > 0 ? 100 : -100,
+      opacity: 0,
+      filter: 'blur(10px)',
+    }),
+    animate: {
+      x: 0,
+      opacity: 1,
+      filter: 'blur(0px)',
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? -100 : 100,
+      opacity: 0,
+      filter: 'blur(10px)',
+    }),
+  }
 
   return (
-    <section className='py-24 bg-white dark:bg-[#0f172a] transition-colors duration-500 overflow-hidden'>
-      <div className='max-w-4xl mx-auto px-6'>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className='text-3xl md:text-4xl font-bold text-center text-slate-900 dark:text-white mb-16'
-        >
-          🌟 What People <span className='text-red-600'>Say</span>
-        </motion.h2>
+    <section
+      id='testimonials'
+      className='py-24 bg-white dark:bg-[#0f172a] transition-colors duration-500 overflow-hidden'
+    >
+      <div className='max-w-5xl mx-auto px-6'>
+        <div className='text-center mb-16 space-y-4'>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            className='text-red-600 dark:text-red-500 font-bold tracking-[0.3em] text-xs uppercase'
+          >
+            Social Proof
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className='text-4xl md:text-5xl font-black text-slate-900 dark:text-white'
+          >
+            Kind words from <span className='text-red-600'>colleagues.</span>
+          </motion.h2>
+        </div>
 
-        <div className='relative bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-8 md:p-12 border border-slate-100 dark:border-slate-800 shadow-xl dark:shadow-none'>
-          <AnimatePresence mode='wait'>
+        <div className='relative bg-slate-50/50 dark:bg-white/5 backdrop-blur-xl rounded-[2.5rem] p-8 md:p-16 border border-slate-200/50 dark:border-white/10 shadow-2xl shadow-slate-200/50 dark:shadow-none'>
+          {/* Big Quote Background Icon */}
+          <FaQuoteLeft className='absolute top-12 left-12 text-slate-200/50 dark:text-white/5 text-8xl md:text-9xl pointer-events-none' />
+
+          <AnimatePresence mode='wait' custom={direction}>
             <motion.div
               key={current}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.5 }}
-              className='flex flex-col'
+              custom={direction}
+              variants={slideVariants}
+              initial='initial'
+              animate='animate'
+              exit='exit'
+              transition={{ duration: 0.4, ease: 'circOut' }}
+              className='relative z-10 flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12'
             >
-              {/* Header: Irregular Image + Name */}
-              <div className='flex items-center gap-6 mb-8'>
-                <div className='relative'>
-                  {/* IRREGULAR RECTANGLE SHAPE */}
-                  <div className='w-24 h-24 md:w-32 md:h-32 overflow-hidden bg-red-600 rotate-3 rounded-[2rem_0.5rem_2rem_0.5rem] shadow-lg'>
+              {/* Profile Image with Irregular Shape */}
+              <div className='shrink-0'>
+                <div className='relative w-32 h-32 md:w-44 md:h-44'>
+                  <div className='absolute inset-0 bg-red-600 rotate-6 rounded-[2.5rem_0.5rem_2.5rem_0.5rem] transition-transform group-hover:rotate-12 duration-500' />
+                  <div className='relative w-full h-full overflow-hidden rounded-[2.5rem_0.5rem_2.5rem_0.5rem] border-4 border-white dark:border-slate-800 shadow-xl'>
                     <Image
                       src={testimonials[current].image}
                       alt={testimonials[current].name}
-                      width={150}
-                      height={150}
-                      className='w-full h-full object-cover -rotate-3 scale-110'
+                      fill
+                      className='object-cover'
                     />
                   </div>
                 </div>
+              </div>
 
-                <div className='text-left'>
-                  <h3 className='text-xl md:text-2xl font-bold text-slate-900 dark:text-white'>
+              {/* Text Area */}
+              <div className='flex-1 text-center md:text-left pt-4'>
+                <p className='text-xl md:text-2xl text-slate-800 dark:text-slate-200 font-medium leading-relaxed mb-8'>
+                  &ldquo;{testimonials[current].text}&rdquo;
+                </p>
+                <div>
+                  <h3 className='text-2xl font-black text-slate-900 dark:text-white'>
                     {testimonials[current].name}
                   </h3>
-                  <p className='text-red-600 dark:text-red-500 font-medium'>
+                  <p className='text-red-600 dark:text-red-500 font-bold text-sm tracking-widest uppercase mt-1'>
                     {testimonials[current].role}
                   </p>
                 </div>
               </div>
-
-              {/* Testimony Below */}
-              <div className='relative'>
-                <FaQuoteLeft className='absolute -top-4 -left-2 text-slate-200 dark:text-slate-800 text-5xl -z-10' />
-                <p className='text-lg md:text-xl text-slate-700 dark:text-slate-300 italic leading-relaxed'>
-                  {testimonials[current].text}
-                </p>
-              </div>
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation Controls */}
-          <div className='flex justify-between items-center mt-10'>
-            {/* Dots */}
-            <div className='flex space-x-2'>
+          {/* Controls Footer */}
+          <div className='flex flex-col md:flex-row justify-between items-center mt-12 gap-8 border-t border-slate-200 dark:border-white/10 pt-8'>
+            {/* Progress Indicators */}
+            <div className='flex space-x-3'>
               {testimonials.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrent(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
+                  onClick={() => {
+                    setDirection(index > current ? 1 : -1)
+                    setCurrent(index)
+                  }}
+                  className={`h-1.5 rounded-full transition-all duration-500 ${
                     index === current
-                      ? 'bg-red-600 w-8'
-                      : 'bg-slate-300 dark:bg-slate-700 w-2'
+                      ? 'bg-red-600 w-12'
+                      : 'bg-slate-300 dark:bg-slate-700 w-4 hover:bg-slate-400'
                   }`}
                 />
               ))}
             </div>
 
-            {/* Arrows */}
+            {/* Navigation Arrows */}
             <div className='flex space-x-4'>
               <button
                 onClick={prevSlide}
-                className='p-3 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-md hover:bg-red-600 hover:text-white transition-all'
+                className='p-4 rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-lg hover:bg-red-600 hover:text-white dark:hover:bg-red-600 transition-all active:scale-90 group'
               >
-                <FaChevronLeft />
+                <FaChevronLeft className='group-hover:-translate-x-1 transition-transform' />
               </button>
               <button
                 onClick={nextSlide}
-                className='p-3 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-md hover:bg-red-600 hover:text-white transition-all'
+                className='p-4 rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-lg hover:bg-red-600 hover:text-white dark:hover:bg-red-600 transition-all active:scale-90 group'
               >
-                <FaChevronRight />
+                <FaChevronRight className='group-hover:translate-x-1 transition-transform' />
               </button>
             </div>
           </div>

@@ -10,17 +10,19 @@ import Link from 'next/link'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Hilosthone | Portfolio',
-  description: 'Creative Software Engineer building modern web apps',
-  // This shows your picture in the browser tab
+  title: 'Hilosthone | Full-Stack Software Engineer',
+  description:
+    'Creative Full-Stack Software Engineer specializing in building high-performance web applications with Next.js, TypeScript, and Tailwind CSS. Explore my portfolio of modern digital solutions.',
+  metadataBase: new URL('https://hilosthone.com'), // IMPORTANT: Change to your actual domain
   icons: {
     icon: '/Hilosthone.jpeg',
     apple: '/Hilosthone.jpeg',
   },
   openGraph: {
-    title: 'Hilosthone | Portfolio',
-    description: 'Creative Software Engineer building modern web apps',
-    url: 'https://hilosthone.com', // Replace with your domain when live
+    title: 'Hilosthone | Full-Stack Software Engineer',
+    description:
+      'Building modern, scalable web apps with Next.js and Tailwind CSS. Check out my latest projects and skills.',
+    url: 'https://hilosthone.com',
     siteName: 'Hilosthone Portfolio',
     images: [
       {
@@ -35,8 +37,9 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Hilosthone | Portfolio',
-    description: 'Creative Software Engineer building modern web apps',
+    title: 'Hilosthone | Full-Stack Software Engineer',
+    description:
+      'Creative Full-Stack Developer specializing in Next.js and Tailwind CSS.',
     images: ['/HilosthoneMetaImage.png'],
   },
 }
@@ -54,18 +57,24 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <Header />
 
-          {/* Floating Linked Portrait */}
-          <div className='fixed bottom-32 left-8 z-40 hidden xl:block'>
+          {/* Floating Linked Portrait - Collison-proof layout */}
+          <div className='fixed bottom-24 right-6 md:bottom-32 md:left-8 z-40'>
             <Link
               href='https://linkedin.com/in/hilosthone'
               target='_blank'
               rel='noopener noreferrer'
               className='group relative block'
             >
+              {/* Notification Ping Animation */}
+              <span className='absolute -top-1 -right-1 flex h-4 w-4 z-50'>
+                <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75'></span>
+                <span className='relative inline-flex rounded-full h-4 w-4 bg-red-600'></span>
+              </span>
+
               {/* Glow Effect */}
               <div className='absolute -inset-1 bg-gradient-to-r from-red-600 to-rose-400 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000' />
 
-              <div className='relative w-14 h-14 rounded-full border-2 border-white dark:border-slate-800 overflow-hidden shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-red-500'>
+              <div className='relative w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white dark:border-slate-800 overflow-hidden shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-red-500'>
                 <Image
                   src='/Hilosthone.jpeg'
                   alt='Hilosthone Portrait'

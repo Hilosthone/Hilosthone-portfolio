@@ -13,57 +13,58 @@ export default function Projects() {
       id: '01',
       title: 'Hpay — Hilosthone Pay',
       description:
-        'A fintech web app clone of Opay, built with Next.js, TypeScript, and Tailwind CSS. It features wallet funding, transfers, transaction history, dark mode, and a responsive UI.',
+        'A fintech web app clone of Opay. It features wallet funding, transfers, and transaction history with a focus on high-speed performance.',
       image: hpayImage,
       link: 'https://hpay-hilosthone.netlify.app/',
+      tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     },
     {
       id: '02',
-      title: 'Twitter Clone Application',
+      title: 'Twitter Clone',
       description:
-        'A Twitter clone built with Next.js, Tailwind CSS, and TypeScript. It features user authentication, real-time updates, and a fully responsive design.',
+        'A real-time social media application featuring user authentication, post creation, and a fully responsive feed.',
       image: twitterClone,
       link: 'https://twitterclonebyhilosthone.netlify.app/',
+      tags: ['Next.js', 'Firebase', 'Tailwind CSS', 'TypeScript'],
     },
     {
       id: '03',
       title: "T's Campus Closet",
       description:
-        'A stylish online closet app built with React and Tailwind CSS, showcasing modern design and responsive layouts.',
+        'An e-commerce style closet app showcasing modern design principles and fluid responsive layouts.',
       image: tCampusCloset,
       link: 'https://t-campus-closet-dem-osite.netlify.app/',
+      tags: ['React', 'Node.js', 'Tailwind CSS', 'AOS'],
     },
     {
       id: '04',
       title: 'Color Generator',
       description:
-        'A color palette generator built with React. It allows users to create, copy, and explore beautiful color schemes easily.',
+        'A creative tool for developers to generate and explore beautiful color palettes instantly.',
       image: colourGenerator,
       link: 'https://react-project-9-colors-generator.netlify.app/',
+      tags: ['React', 'CSS3', 'Lucide React'],
     },
   ]
 
   return (
     <section
       id='projects'
-      // Standardized background for theme compatibility
       className='bg-white dark:bg-[#0f172a] text-slate-900 dark:text-white py-24 px-6 md:px-12 lg:px-24 transition-colors duration-500'
     >
       <div className='max-w-7xl mx-auto'>
-        {/* Section Title */}
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className='text-3xl md:text-4xl font-bold mb-16'
         >
-          My{' '}
+          Featured{' '}
           <span className='text-red-600 dark:text-red-500 font-extrabold'>
             Projects
           </span>
         </motion.h2>
 
-        {/* Projects List */}
         <div className='space-y-32'>
           {projects.map((project, index) => (
             <motion.div
@@ -76,45 +77,64 @@ export default function Projects() {
                 index % 2 === 1 ? 'md:flex-row-reverse' : ''
               }`}
             >
-              {/* Image Container */}
+              {/* Image with Hover Effect */}
               <div className='w-full md:w-1/2 group relative'>
-                <div className='absolute -inset-2 bg-gradient-to-r from-red-600 to-red-400 rounded-2xl blur opacity-10 group-hover:opacity-30 transition duration-500'></div>
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  className='relative rounded-2xl shadow-xl shadow-slate-200 dark:shadow-none hover:scale-[1.02] transition-transform duration-500 cursor-pointer'
-                  placeholder='blur'
-                  quality={90}
-                />
+                <a
+                  href={project.link}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  <div className='absolute -inset-2 bg-gradient-to-r from-red-600 to-rose-500 rounded-2xl blur opacity-0 group-hover:opacity-40 transition-opacity duration-500'></div>
+                  <div className='relative overflow-hidden rounded-2xl shadow-xl border border-slate-200 dark:border-white/5'>
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      className='w-full h-auto transition-transform duration-700 ease-out group-hover:scale-110'
+                      placeholder='blur'
+                    />
+                  </div>
+                </a>
               </div>
 
               {/* Text Content */}
-              <div className='w-full md:w-1/2 space-y-4'>
-                <h3 className='text-6xl md:text-8xl font-black text-slate-100 dark:text-slate-800 transition-colors'>
+              <div className='w-full md:w-1/2 space-y-5'>
+                <h3 className='text-6xl md:text-8xl font-black text-slate-100 dark:text-slate-800/40 select-none leading-none'>
                   {project.id}
                 </h3>
-                <h4 className='text-2xl md:text-3xl font-bold text-slate-900 dark:text-white'>
+                <h4 className='text-2xl md:text-3xl font-bold'>
                   {project.title}
                 </h4>
-                <p className='text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-lg'>
+
+                {/* Tech Stack Badges */}
+                <div className='flex flex-wrap gap-2'>
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className='px-3 py-1 text-xs font-bold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-full border border-slate-200 dark:border-white/5 shadow-sm'
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <p className='text-slate-600 dark:text-slate-400 text-lg leading-relaxed'>
                   {project.description}
                 </p>
 
-                <div className='pt-4'>
+                <div className='pt-2'>
                   <a
                     href={project.link}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='inline-flex items-center text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 font-bold text-lg transition-all group'
+                    className='inline-flex items-center text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 font-bold text-lg group'
                   >
-                    <span>View Project</span>
+                    <span>Launch Site</span>
                     <svg
-                      xmlns='http://www.w3.org/2000/svg'
+                      className='w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform'
                       fill='none'
                       viewBox='0 0 24 24'
-                      strokeWidth={2.5}
                       stroke='currentColor'
-                      className='w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform'
+                      strokeWidth={2.5}
                     >
                       <path
                         strokeLinecap='round'

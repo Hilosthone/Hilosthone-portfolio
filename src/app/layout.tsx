@@ -14,7 +14,6 @@ export const metadata = {
   description:
     'Creative Full-Stack Software Engineer specializing in building high-performance web applications with Next.js, TypeScript, and Tailwind CSS. Explore my portfolio of modern digital solutions.',
 
-  // FIXED: Point this to your actual Netlify URL
   metadataBase: new URL('https://hilosthone-portfolio.netlify.app'),
 
   icons: {
@@ -29,7 +28,7 @@ export const metadata = {
     siteName: 'Hilosthone Portfolio',
     images: [
       {
-        url: '/Hilosthone.png',
+        url: '/Hilosthone.jpeg',
         width: 1200,
         height: 630,
         alt: 'Hilosthone Portfolio Preview',
@@ -43,7 +42,7 @@ export const metadata = {
     title: 'Hilosthone | Full-Stack Software Engineer',
     description:
       'Creative Full-Stack Developer specializing in Next.js and Tailwind CSS.',
-    images: ['/Hilosthone.png'],
+    images: ['/Hilosthone.jpeg'], 
   },
 }
 
@@ -60,7 +59,7 @@ export default function RootLayout({
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <Header />
 
-          {/* Floating Linked Portrait - Collison-proof layout */}
+          {/* Floating Linked Portrait - Collision-proof layout */}
           <div className='fixed bottom-24 right-6 md:bottom-32 md:left-8 z-40'>
             <Link
               href='https://linkedin.com/in/hilosthone'

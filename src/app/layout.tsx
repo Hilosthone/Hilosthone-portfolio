@@ -42,7 +42,7 @@ export const metadata = {
     title: 'Hilosthone | Full-Stack Software Engineer',
     description:
       'Creative Full-Stack Developer specializing in Next.js and Tailwind CSS.',
-    images: ['/Hilosthone.jpeg'], 
+    images: ['/Hilosthone.jpeg'],
   },
 }
 
@@ -52,14 +52,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning className='scroll-smooth'>
       <body
-        className={`${inter.className} bg-white dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 transition-colors duration-300`}
+        className={`${inter.className} min-h-screen w-full overflow-x-hidden bg-white dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col`}
       >
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <Header />
 
-          {/* Floating Linked Portrait - Collision-proof layout */}
+          {/* Floating Linked Portrait */}
           <div className='fixed bottom-24 right-6 md:bottom-32 md:left-8 z-40'>
             <Link
               href='https://linkedin.com/in/hilosthone'
@@ -67,13 +67,11 @@ export default function RootLayout({
               rel='noopener noreferrer'
               className='group relative block'
             >
-              {/* Notification Ping Animation */}
               <span className='absolute -top-1 -right-1 flex h-4 w-4 z-50'>
                 <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75'></span>
                 <span className='relative inline-flex rounded-full h-4 w-4 bg-red-600'></span>
               </span>
 
-              {/* Glow Effect */}
               <div className='absolute -inset-1 bg-gradient-to-r from-red-600 to-rose-400 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000' />
 
               <div className='relative w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white dark:border-slate-800 overflow-hidden shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-red-500'>
@@ -88,7 +86,11 @@ export default function RootLayout({
             </Link>
           </div>
 
-          <main>{children}</main>
+          {/* Main content expands to fill available space */}
+          <main className='flex-grow w-full max-w-[100vw] overflow-x-hidden'>
+            {children}
+          </main>
+
           <Footer />
           <BackToTop />
         </ThemeProvider>

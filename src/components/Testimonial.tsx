@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { FaChevronLeft, FaChevronRight, FaQuoteLeft } from 'react-icons/fa'
 
 const testimonials = [
   {
@@ -36,17 +36,16 @@ const testimonials = [
   },
   {
     name: 'David Nwachukwu',
-    role: 'Software Engineer, Collaborator',
+    role: 'Software Engineer',
     image:
       'https://media.istockphoto.com/id/1439699853/photo/businessman-with-grizzled-hair-crossing-his-arms.jpg?s=612x612&w=0&k=20&c=-d7s1AeWfCXu8yCLy1_m8E1qMz1azt9fi6FQjsSLDEI=',
-    text: 'Collaborating with Hilosthone has been one of my best professional experiences. His technical depth and calm leadership make every project smoother and smarter.',
+    text: 'Collaborating with Hilosthone has been one of my best professional experiences. His technical depth and calm leadership make every project smoother.',
   },
 ]
 
 export default function TestimonialCarousel() {
   const [current, setCurrent] = useState(0)
 
-  // Auto-slide every 8 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % testimonials.length)
@@ -54,80 +53,99 @@ export default function TestimonialCarousel() {
     return () => clearInterval(timer)
   }, [])
 
-  const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % testimonials.length)
-  }
-
-  const prevSlide = () => {
+  const nextSlide = () => setCurrent((prev) => (prev + 1) % testimonials.length)
+  const prevSlide = () =>
     setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length)
-  }
 
   return (
-    <section className='py-16 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden'>
-      <div className='max-w-5xl mx-auto px-4 text-center'>
-        <h2 className='text-3xl md:text-4xl font-bold text-gray-900 mb-10'>
-          🌟 What People Say About Me
-        </h2>
+    <section className='py-24 bg-white dark:bg-[#0f172a] transition-colors duration-500 overflow-hidden'>
+      <div className='max-w-4xl mx-auto px-6'>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className='text-3xl md:text-4xl font-bold text-center text-slate-900 dark:text-white mb-16'
+        >
+          🌟 What People <span className='text-red-600'>Say</span>
+        </motion.h2>
 
-        <div className='relative'>
-          {/* Arrow buttons */}
-          <button
-            onClick={prevSlide}
-            className='absolute left-2 md:left-6 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-red-600 hover:text-white text-gray-700 rounded-full p-3 shadow-md transition-all'
-          >
-            <FaChevronLeft size={18} />
-          </button>
-          <button
-            onClick={nextSlide}
-            className='absolute right-2 md:right-6 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-red-600 hover:text-white text-gray-700 rounded-full p-3 shadow-md transition-all'
-          >
-            <FaChevronRight size={18} />
-          </button>
-
+        <div className='relative bg-slate-50 dark:bg-slate-900/50 rounded-3xl p-8 md:p-12 border border-slate-100 dark:border-slate-800 shadow-xl dark:shadow-none'>
           <AnimatePresence mode='wait'>
             <motion.div
               key={current}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.8, ease: 'easeInOut' }}
-              className='flex flex-col items-center space-y-6 px-6'
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.05 }}
+              transition={{ duration: 0.5 }}
+              className='flex flex-col'
             >
-              <Image
-                src={testimonials[current].image}
-                alt={testimonials[current].name}
-                width={120}
-                height={120}
-                className='rounded-full object-cover shadow-lg w-24 h-24 md:w-32 md:h-32'
-              />
-              <p className='text-base md:text-lg text-gray-700 max-w-2xl italic leading-relaxed'>
-                “{testimonials[current].text}”
-              </p>
-              <div>
-                <h3 className='text-lg md:text-xl font-semibold text-gray-900'>
-                  {testimonials[current].name}
-                </h3>
-                <p className='text-sm text-gray-500'>
-                  {testimonials[current].role}
+              {/* Header: Irregular Image + Name */}
+              <div className='flex items-center gap-6 mb-8'>
+                <div className='relative'>
+                  {/* IRREGULAR RECTANGLE SHAPE */}
+                  <div className='w-24 h-24 md:w-32 md:h-32 overflow-hidden bg-red-600 rotate-3 rounded-[2rem_0.5rem_2rem_0.5rem] shadow-lg'>
+                    <Image
+                      src={testimonials[current].image}
+                      alt={testimonials[current].name}
+                      width={150}
+                      height={150}
+                      className='w-full h-full object-cover -rotate-3 scale-110'
+                    />
+                  </div>
+                </div>
+
+                <div className='text-left'>
+                  <h3 className='text-xl md:text-2xl font-bold text-slate-900 dark:text-white'>
+                    {testimonials[current].name}
+                  </h3>
+                  <p className='text-red-600 dark:text-red-500 font-medium'>
+                    {testimonials[current].role}
+                  </p>
+                </div>
+              </div>
+
+              {/* Testimony Below */}
+              <div className='relative'>
+                <FaQuoteLeft className='absolute -top-4 -left-2 text-slate-200 dark:text-slate-800 text-5xl -z-10' />
+                <p className='text-lg md:text-xl text-slate-700 dark:text-slate-300 italic leading-relaxed'>
+                  {testimonials[current].text}
                 </p>
               </div>
             </motion.div>
           </AnimatePresence>
-        </div>
 
-        {/* Dots Navigation */}
-        <div className='flex justify-center mt-8 space-x-2'>
-          {testimonials.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrent(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === current
-                  ? 'bg-red-600 w-5'
-                  : 'bg-gray-300 hover:bg-gray-400'
-              }`}
-            />
-          ))}
+          {/* Navigation Controls */}
+          <div className='flex justify-between items-center mt-10'>
+            {/* Dots */}
+            <div className='flex space-x-2'>
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrent(index)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === current
+                      ? 'bg-red-600 w-8'
+                      : 'bg-slate-300 dark:bg-slate-700 w-2'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Arrows */}
+            <div className='flex space-x-4'>
+              <button
+                onClick={prevSlide}
+                className='p-3 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-md hover:bg-red-600 hover:text-white transition-all'
+              >
+                <FaChevronLeft />
+              </button>
+              <button
+                onClick={nextSlide}
+                className='p-3 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 shadow-md hover:bg-red-600 hover:text-white transition-all'
+              >
+                <FaChevronRight />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

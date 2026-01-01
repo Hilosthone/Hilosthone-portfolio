@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import hpayImage from '../public/hpayImage.jpg'
 import twitterClone from '../public/TwitterClone.png'
 import colourGenerator from '../public/colourGenerator.png'
@@ -45,67 +46,86 @@ export default function Projects() {
   return (
     <section
       id='projects'
-      className='bg-black text-white py-24 px-6 md:px-12 lg:px-24'
+      // Standardized background for theme compatibility
+      className='bg-white dark:bg-[#0f172a] text-slate-900 dark:text-white py-24 px-6 md:px-12 lg:px-24 transition-colors duration-500'
     >
       <div className='max-w-7xl mx-auto'>
         {/* Section Title */}
-        <h2 className='text-3xl md:text-4xl font-bold mb-12'>
-          My <span className='text-gray-300 font-extrabold'>Projects</span>
-        </h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className='text-3xl md:text-4xl font-bold mb-16'
+        >
+          My{' '}
+          <span className='text-red-600 dark:text-red-500 font-extrabold'>
+            Projects
+          </span>
+        </motion.h2>
 
         {/* Projects List */}
-        <div className='space-y-20'>
+        <div className='space-y-32'>
           {projects.map((project, index) => (
-            <div
+            <motion.div
               key={project.id}
-              className={`flex flex-col md:flex-row items-center gap-10 ${
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true, margin: '-100px' }}
+              className={`flex flex-col md:flex-row items-center gap-12 ${
                 index % 2 === 1 ? 'md:flex-row-reverse' : ''
               }`}
             >
-              {/* Image */}
-              <div className='w-full md:w-1/2'>
+              {/* Image Container */}
+              <div className='w-full md:w-1/2 group relative'>
+                <div className='absolute -inset-2 bg-gradient-to-r from-red-600 to-red-400 rounded-2xl blur opacity-10 group-hover:opacity-30 transition duration-500'></div>
                 <Image
                   src={project.image}
                   alt={project.title}
-                  className='rounded-2xl shadow-lg shadow-gray-900/40 hover:scale-[1.02] transition-transform duration-500'
+                  className='relative rounded-2xl shadow-xl shadow-slate-200 dark:shadow-none hover:scale-[1.02] transition-transform duration-500 cursor-pointer'
                   placeholder='blur'
                   quality={90}
                 />
               </div>
 
-              {/* Text */}
-              <div className='w-full md:w-1/2'>
-                <h3 className='text-6xl font-extrabold text-gray-600 mb-2'>
+              {/* Text Content */}
+              <div className='w-full md:w-1/2 space-y-4'>
+                <h3 className='text-6xl md:text-8xl font-black text-slate-100 dark:text-slate-800 transition-colors'>
                   {project.id}
                 </h3>
-                <h4 className='text-2xl font-semibold mb-4'>{project.title}</h4>
-                <p className='text-gray-400 mb-4 leading-relaxed'>
+                <h4 className='text-2xl md:text-3xl font-bold text-slate-900 dark:text-white'>
+                  {project.title}
+                </h4>
+                <p className='text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-lg'>
                   {project.description}
                 </p>
-                <a
-                  href={project.link}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='inline-flex items-center text-gray-300 hover:text-white font-medium transition-colors'
-                >
-                  <span>View Project</span>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth={2}
-                    stroke='currentColor'
-                    className='w-4 h-4 ml-2'
+
+                <div className='pt-4'>
+                  <a
+                    href={project.link}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='inline-flex items-center text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 font-bold text-lg transition-all group'
                   >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M13 7l5 5m0 0l-5 5m5-5H6'
-                    />
-                  </svg>
-                </a>
+                    <span>View Project</span>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      strokeWidth={2.5}
+                      stroke='currentColor'
+                      className='w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        d='M13 7l5 5m0 0l-5 5m5-5H6'
+                      />
+                    </svg>
+                  </a>
+                </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

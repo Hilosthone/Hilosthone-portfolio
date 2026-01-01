@@ -3,130 +3,57 @@ import { Github, Twitter, Linkedin } from 'lucide-react'
 
 export default function Footer() {
   return (
-    <footer className='bg-gradient-to-b from-gray-900 via-black to-gray-950 text-white border-t border-gray-800'>
-      <div className='max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-10 flex flex-col md:flex-row justify-between items-center gap-6'>
+    <footer className='bg-white dark:bg-[#0f172a] text-slate-900 dark:text-white border-t border-slate-100 dark:border-slate-800 transition-colors duration-500'>
+      <div className='max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-12 flex flex-col md:flex-row justify-between items-center gap-8'>
         {/* Left: Logo & Name */}
-        <div className='flex items-center space-x-3 group'>
-          <div className='bg-white text-black font-bold rounded-full w-9 h-9 flex items-center justify-center shadow-lg shadow-white/10 group-hover:shadow-cyan-400/30 transition-all duration-300'>
+        <div className='flex items-center space-x-3 group cursor-default'>
+          <div className='bg-slate-900 dark:bg-white text-white dark:text-black font-bold rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition-all duration-300 group-hover:scale-110'>
             H
           </div>
-          <span className='text-xl font-semibold tracking-tight group-hover:text-gray-200 transition-colors duration-300'>
-            Hilosthone
-          </span>
+          <span className='text-xl font-bold tracking-tight'>Hilosthone</span>
         </div>
 
         {/* Center: Social Links */}
         <div className='flex space-x-6'>
-          <a
-            href='https://github.com/Hilosthone'
-            target='_blank'
-            rel='noopener noreferrer'
-            aria-label='GitHub'
-            className='text-gray-400 hover:text-white transition-all duration-300 hover:scale-110'
-          >
-            <Github className='w-5 h-5' />
-          </a>
-          <a
-            href='https://x.com/Hilosthone1?t=o9XCOVCSEu5IbaCSaL6HDQ&s=09'
-            target='_blank'
-            rel='noopener noreferrer'
-            aria-label='Twitter (X)'
-            className='text-gray-400 hover:text-white transition-all duration-300 hover:scale-110'
-          >
-            <Twitter className='w-5 h-5' />
-          </a>
-          <a
-            href='https://linkedin.com/'
-            target='_blank'
-            rel='noopener noreferrer'
-            aria-label='LinkedIn'
-            className='text-gray-400 hover:text-white transition-all duration-300 hover:scale-110'
-          >
-            <Linkedin className='w-5 h-5' />
-          </a>
+          {[
+            { icon: <Github />, href: 'https://github.com/Hilosthone' },
+            { icon: <Twitter />, href: 'https://x.com/Hilosthone1' },
+            { icon: <Linkedin />, href: 'https://linkedin.com' },
+          ].map((social, idx) => (
+            <a
+              key={idx}
+              href={social.href}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-slate-400 hover:text-red-600 dark:hover:text-red-500 transition-all duration-300 transform hover:scale-125'
+            >
+              {/* Cloning the icon to ensure consistent sizing */}
+              {typeof social.icon === 'object' &&
+                require('react').cloneElement(social.icon, {
+                  className: 'w-6 h-6',
+                })}
+            </a>
+          ))}
         </div>
 
         {/* Right: Info Text */}
-        <div className='text-center md:text-right text-sm text-gray-400 leading-relaxed'>
+        <div className='text-center md:text-right text-sm text-slate-500 dark:text-slate-400 leading-relaxed'>
           <p>
             © {new Date().getFullYear()}{' '}
-            <span className='text-white font-medium'>Hilosthone</span>. All
-            rights reserved.
+            <span className='text-slate-900 dark:text-white font-semibold'>
+              Hilosthone
+            </span>
+            .
           </p>
-          <p className='mt-1 text-gray-500 hover:text-gray-300 transition-colors duration-300'>
-            Designed in <span className='text-cyan-400 font-medium'>Figma</span>{' '}
-            • Built with{' '}
-            <span className='text-blue-400 font-medium'>Next.js</span> &{' '}
-            <span className='text-sky-400 font-medium'>TailwindCSS</span>
+          <p className='mt-1'>
+            Built with <span className='text-blue-500'>Next.js</span> &{' '}
+            <span className='text-red-500'>Framer Motion</span>
           </p>
         </div>
       </div>
 
-      {/* Subtle Bottom Fade */}
-      <div className='w-full h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-60'></div>
+      {/* Subtle Bottom Line */}
+      <div className='w-full h-px bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-800 to-transparent'></div>
     </footer>
   )
 }
-
-// import { Github, Twitter, Linkedin } from 'lucide-react'
-
-// export default function Footer() {
-//   return (
-//     <footer className='bg-gradient-to-b from-gray-900 via-black to-gray-950 text-white border-t border-gray-800'>
-//       <div className='max-w-7xl mx-auto px-6 md:px-12 lg:px-24 py-10 flex flex-col md:flex-row justify-between items-center gap-6'>
-//         {/* Left: Logo */}
-//         <div className='flex items-center space-x-3'>
-//           <div className='bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center shadow-lg shadow-white/10'>
-//             H
-//           </div>
-//           <span className='text-xl font-semibold tracking-tight hover:text-gray-200 transition-colors duration-300'>
-//             Hilosthone
-//           </span>
-//         </div>
-
-//         {/* Center: Social Links */}
-//         <div className='flex space-x-5'>
-//           <a
-//             href='https://github.com/Hilosthone'
-//             target='_blank'
-//             rel='noopener noreferrer'
-//             className='text-gray-400 hover:text-white transition-all duration-300 hover:scale-110'
-//           >
-//             <Github className='w-5 h-5' />
-//           </a>
-//           <a
-//             href='https://x.com/Hilosthone1?t=o9XCOVCSEu5IbaCSaL6HDQ&s=09'
-//             target='_blank'
-//             rel='noopener noreferrer'
-//             className='text-gray-400 hover:text-white transition-all duration-300 hover:scale-110'
-//           >
-//             <Twitter className='w-5 h-5' />
-//           </a>
-//           <a
-//             href='https://linkedin.com/'
-//             target='_blank'
-//             rel='noopener noreferrer'
-//             className='text-gray-400 hover:text-white transition-all duration-300 hover:scale-110'
-//           >
-//             <Linkedin className='w-5 h-5' />
-//           </a>
-//         </div>
-
-//         {/* Right: Info Text */}
-//         <div className='text-center md:text-right text-sm text-gray-400 leading-relaxed'>
-//           <p>
-//             © {new Date().getFullYear()}{' '}
-//             <span className='text-white font-medium'>Hilosthone</span>. All
-//             rights reserved.
-//           </p>
-//           <p className='mt-1 text-gray-500 hover:text-gray-300 transition-colors duration-300'>
-//             Designed in Figma • Built with Next.js & TailwindCSS
-//           </p>
-//         </div>
-//       </div>
-
-//       {/* Subtle bottom fade line for depth */}
-//       <div className='w-full h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent opacity-60'></div>
-//     </footer>
-//   )
-// }

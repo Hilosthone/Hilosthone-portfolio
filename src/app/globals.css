@@ -1,9 +1,34 @@
 @import "tailwindcss";
 
+/* Tailwind v4 uses a different approach for theme variables */
+@theme {
+  --color-background-light: #ffffff;
+  --color-background-dark: #0f172a;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 section {
   scroll-margin-top: 80px;
+}
+
+/* Base styles in v4 */
+@layer base {
+  body {
+    background-color: var(--color-background-light);
+    color: var(--slate-900);
+    transition-property: color, background-color;
+    transition-duration: 300ms;
+  }
+}
+
+/* Explicit Dark Mode override */
+/* Tailwind v4 looks for the .dark class on the html element by default */
+@variant dark (&:where(.dark, .dark *));
+
+.dark body {
+  background-color: var(--color-background-dark);
+  color: var(--slate-100);
 }

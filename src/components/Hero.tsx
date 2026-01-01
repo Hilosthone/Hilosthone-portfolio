@@ -49,38 +49,48 @@ const Hero = () => {
   return (
     <section
       id='hero'
-      className='flex flex-col-reverse md:flex-row items-center md:items-center justify-between px-6 md:px-12 lg:px-24 py-24  min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-gray-900 dark:to-black'
+      // Use standard bg-slate classes as backup to ensure dark mode visibility
+      className='flex flex-col-reverse md:flex-row items-center justify-between px-6 md:px-12 lg:px-24 py-24 min-h-screen bg-white dark:bg-[#0f172a] transition-colors duration-500'
     >
-      {/* ===== Left Content ===== */} 
+      {/* ===== Left Content ===== */}
       <motion.div
         className='md:w-1/2 space-y-6 text-center md:text-left mt-10 md:mt-0'
-        initial={{ opacity: 0, x: -100 }}
+        initial={{ opacity: 0, x: -50 }}
         whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <h1 className='text-3xl sm:text-4xl lg:text-5xl font-semibold leading-snug'>
+        {/* Explicitly set text-slate-900 for light and text-white for dark */}
+        <h1 className='text-3xl sm:text-4xl lg:text-5xl font-semibold leading-snug text-slate-900 dark:text-white'>
           Hello I’m{' '}
-          <span className='text-red-600 font-extrabold'>
+          <span className='text-red-600 dark:text-red-500 font-extrabold drop-shadow-[0_0_15px_rgba(220,38,38,0.3)]'>
             Hilosthone Sulyman.
           </span>{' '}
           A{' '}
-          <span className='text-red-600 font-extrabold'>
+          <span className='text-red-600 dark:text-red-500 font-extrabold'>
             Software Developer
           </span>{' '}
-          Based In <span className='text-red-600 font-extrabold'>Nigeria.</span>
+          Based In{' '}
+          <span className='text-red-600 dark:text-red-500 font-extrabold'>
+            Nigeria.
+          </span>
         </h1>
 
         <div className='text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed max-w-lg mx-auto md:mx-0'>
           I craft sleek, intuitive, and performant digital experiences with{' '}
-          <strong>Next.js</strong>, <strong>TypeScript</strong>, and{' '}
-          <strong>TailwindCSS</strong> — blending design and functionality to
-          bring ideas to life on the web. Skilled in <strong>HTML</strong>,{' '}
-          <strong>CSS</strong>, <strong>JavaScript</strong>,{' '}
-          <strong>React</strong>, <strong>Bootstrap</strong>,{' '}
-          <strong>Framer Motion</strong>, <strong>Node.js</strong>,{' '}
-          <strong>Git</strong>, and <strong>Python</strong>, I build clean,
-          scalable, and engaging interfaces that deliver real impact.
+          <strong className='text-slate-900 dark:text-white font-bold'>
+            Next.js
+          </strong>
+          ,
+          <strong className='text-slate-900 dark:text-white font-bold'>
+            {' '}
+            TypeScript
+          </strong>
+          , and{' '}
+          <strong className='text-slate-900 dark:text-white font-bold'>
+            TailwindCSS
+          </strong>{' '}
+          — blending design and functionality to bring ideas to life on the web.
         </div>
 
         {/* Social Icons */}
@@ -92,9 +102,9 @@ const Hero = () => {
               target='_blank'
               rel='noopener noreferrer'
               aria-label={social.label}
-              whileHover={{ scale: 1.2, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-              className='text-gray-500 hover:text-red-500 transition-colors duration-300 text-2xl md:text-3xl'
+              whileHover={{ scale: 1.2, y: -5 }}
+              whileTap={{ scale: 0.9 }}
+              className='text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-500 transition-colors duration-300 text-2xl'
             >
               {social.icon}
             </motion.a>
@@ -105,11 +115,11 @@ const Hero = () => {
         <motion.div
           className='mt-10 flex justify-center md:justify-start'
           animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
+          transition={{ repeat: Infinity, duration: 2 }}
         >
           <a
-            href='#skills'
-            className='text-gray-400 hover:text-red-500 text-sm uppercase tracking-wide'
+            href='#about'
+            className='text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-500 text-sm uppercase tracking-widest font-bold'
           >
             Scroll Down ↓
           </a>
@@ -118,18 +128,21 @@ const Hero = () => {
 
       {/* ===== Right Image ===== */}
       <motion.div
-        className='md:w-1/2 flex justify-center md:justify-end items-center'
-        initial={{ opacity: 0, x: 100 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        className='md:w-1/2 flex justify-center md:justify-end items-center relative'
+        initial={{ opacity: 0, scale: 0.8 }}
+        whileInView={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1 }}
         viewport={{ once: true }}
       >
+        {/* The Glow Effect - adjusted for visibility */}
+        <div className='absolute inset-0 bg-red-600/10 dark:bg-red-500/20 blur-[80px] rounded-full -z-10' />
+
         <Image
           src={avartar}
           alt='Hilosthone working illustration'
           width={700}
           height={700}
-          className='max-w-[80%] sm:max-w-[60%] md:max-w-[80%] lg:max-w-[100%] h-auto object-contain'
+          className='max-w-[80%] lg:max-w-[100%] h-auto object-contain drop-shadow-2xl'
           priority
         />
       </motion.div>

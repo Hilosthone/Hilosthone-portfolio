@@ -7,124 +7,129 @@ import {
   FaTiktok,
   FaInstagram,
 } from 'react-icons/fa'
+import { motion } from 'framer-motion'
 
 export default function Contact() {
   return (
     <section
       id='contact'
-      className='py-20 px-6 md:px-16 lg:px-24 bg-gradient-to-b from-gray-50 to-white text-gray-800'
+      className='py-24 px-6 md:px-16 lg:px-24 bg-white dark:bg-[#0f172a] transition-colors duration-500'
     >
-      <div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start'>
-        {/* Contact Form */}
-        <form className='flex flex-col space-y-4'>
-          <input
-            type='text'
-            placeholder='Your name'
-            className='border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-red-500'
-          />
-          <input
-            type='email'
-            placeholder='Email'
-            className='border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-red-500'
-          />
-          <input
-            type='text'
-            placeholder='Your website (if exists)'
-            className='border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-red-500'
-          />
-          <textarea
-            rows={5}
-            placeholder='How can I help?*'
-            className='border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-red-500 resize-none'
-          ></textarea>
-
-          <button
-            type='submit'
-            className='bg-red-600 text-white py-3 rounded-md font-semibold hover:bg-red-700 transition-all duration-300'
+      <div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center'>
+        {/* Contact Form Section */}
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className='order-2 md:order-1'
+        >
+          <form
+            className='flex flex-col space-y-4'
+            onSubmit={(e) => e.preventDefault()}
           >
-            Get In Touch
-          </button>
+            <input
+              type='text'
+              placeholder='Your name'
+              className='bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white transition-all'
+            />
+            <input
+              type='email'
+              placeholder='Email'
+              className='bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white transition-all'
+            />
+            <textarea
+              rows={5}
+              placeholder='How can I help?*'
+              className='bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-red-500 dark:text-white resize-none transition-all'
+            ></textarea>
 
-          {/* Social Icons */}
-          <div className='flex space-x-3 mt-4'>
-            <a
-              href='https://www.facebook.com/solihullah.sulaiman.3'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='p-3 bg-black text-white rounded-md hover:bg-blue-600 transition-all duration-300'
+            <button
+              type='submit'
+              className='bg-red-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-red-700 hover:shadow-lg hover:shadow-red-600/20 transition-all duration-300 active:scale-95'
             >
-              <FaFacebookF />
-            </a>
-            <a
-              href='https://x.com/Hilosthone1?t=o9XCOVCSEu5IbaCSaL6HDQ&s=09'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='p-3 bg-black text-white rounded-md hover:bg-sky-500 transition-all duration-300'
-            >
-              <FaTwitter />
-            </a>
-            <a
-              href='https://linkedin.com'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='p-3 bg-black text-white rounded-md hover:bg-blue-700 transition-all duration-300'
-            >
-              <FaLinkedinIn />
-            </a>
-            <a
-              href='https://vm.tiktok.com/ZSHcdJSvPMayf-TwhhE/'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='p-3 bg-black text-white rounded-md hover:bg-gray-900 transition-all duration-300'
-            >
-              <FaTiktok />
-            </a>
-            <a
-              href='https://www.instagram.com/hilosthone?igsh=MWM2am8zbXB2NTNvdg=='
-              target='_blank'
-              rel='noopener noreferrer'
-              className='p-3 bg-black text-white rounded-md hover:bg-red-400 transition-all duration-300'
-            >
-              <FaInstagram />
-            </a>
-          </div>
-        </form>
+              Get In Touch
+            </button>
 
-        {/* Text Content */}
-        <div className='space-y-6'>
-          <h2 className='text-4xl md:text-5xl font-bold text-gray-900 leading-tight'>
-            Let’s{' '}
-            <span className='text-red-600 underline underline-offset-4'>
-              talk
-            </span>{' '}
-            for <br />
-            <span className='text-gray-900'>Something special</span>
+            {/* Social Icons - Now correctly inside the parent motion div */}
+            <div className='flex space-x-4 mt-6 justify-center md:justify-start'>
+              {[
+                {
+                  icon: <FaFacebookF />,
+                  href: 'https://www.facebook.com/solihullah.sulaiman.3',
+                  color: 'hover:text-blue-600',
+                },
+                {
+                  icon: <FaTwitter />,
+                  href: 'https://x.com/Hilosthone1',
+                  color: 'hover:text-sky-500',
+                },
+                {
+                  icon: <FaLinkedinIn />,
+                  href: 'https://linkedin.com/in/hilosthone/',
+                  color: 'hover:text-blue-700',
+                },
+                {
+                  icon: <FaTiktok />,
+                  href: 'https://vm.tiktok.com/ZSHcdJSvPMayf-TwhhE/',
+                  color: 'hover:text-pink-500',
+                },
+                {
+                  icon: <FaInstagram />,
+                  href: 'https://instagram.com/hilosthone',
+                  color: 'hover:text-rose-500',
+                },
+              ].map((social, idx) => (
+                <a
+                  key={idx}
+                  href={social.href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className={`text-2xl text-slate-400 dark:text-slate-500 ${social.color} transition-all duration-300 transform hover:scale-125`}
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+          </form>
+        </motion.div>
+
+        {/* Text Content Section */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className='space-y-8 order-1 md:order-2'
+        >
+          <h2 className='text-4xl md:text-6xl font-black text-slate-900 dark:text-white leading-tight'>
+            Let’s <span className='text-red-600'>talk</span> <br />
+            for something special
           </h2>
-          <p className='text-gray-600 text-lg leading-relaxed'>
+          <p className='text-slate-600 dark:text-slate-400 text-lg leading-relaxed max-w-md'>
             I seek to push the limits of creativity to craft high-engaging,
-            user-friendly, and memorable digital experiences. Whether it’s
-            design, development, or mentorship — let’s build something
-            meaningful together.
+            user-friendly, and memorable digital experiences. Let’s build
+            something meaningful together.
           </p>
 
-          <div>
-            <p className='font-semibold text-red-600 text-lg'>
+          <div className='space-y-2'>
+            <p className='font-bold text-slate-900 dark:text-white text-xl'>
               <a
-                href='http://solihullahsulyan@gmail.com'
-                target='_blank'
-                rel='noopener noreferrer'
+                href='mailto:solihullahsulyan@gmail.com'
+                className='hover:text-red-600 transition-colors'
               >
                 solihullahsulyan@gmail.com
               </a>
             </p>
-            <p className='text-gray-700 text-lg'>
-              <a href='tel:+2349051772499' className='hover:underline'>
+            <p className='text-slate-500 dark:text-slate-400 text-lg font-medium'>
+              <a
+                href='tel:+2349051772499'
+                className='hover:text-slate-900 dark:hover:text-white transition-colors'
+              >
                 +234 905 177 2499
               </a>
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
-}  
+}

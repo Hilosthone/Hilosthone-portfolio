@@ -2,7 +2,8 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ExternalLink, Github } from 'lucide-react' // Modern icons
+import { ExternalLink, Github } from 'lucide-react'
+import techDive from '../public/techDive.png'
 import hpayImage from '../public/hpayImage.jpg'
 import twitterClone from '../public/TwitterClone.png'
 import colourGenerator from '../public/colourGenerator.png'
@@ -12,42 +13,52 @@ export default function Projects() {
   const projects = [
     {
       id: '01',
+      title: 'TechDive Innovations (Edutech Platform)',
+      description:
+        'An academic platform for learning software development, cybersecurity, graphics design, and more. Features interactive lessons, coding challenges, and project showcases.',
+      image: techDive,
+      live: 'https://techdive-innovations.netlify.app/',
+      github: 'https://github.com/Hilosthone/TechDive-Innovations',
+      tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'AOS'],
+    },
+    {
+      id: '02',
       title: 'Hpay — Hilosthone Pay',
       description:
         'A comprehensive fintech solution. Features include wallet management, P2P transfers, and real-time transaction tracking with high-performance edge computing.',
       image: hpayImage,
       live: 'https://hpay-hilosthone.netlify.app/',
-      github: '#', // Add your repo link here
+      github: 'https://github.com/Hilosthone/hpay',
       tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     },
     {
-      id: '02',
+      id: '03', // Fixed ID
       title: 'Twitter / X Clone',
       description:
         'Real-time social architecture. Implemented secure authentication, media uploads, and a dynamic feed using Firebase synchronization.',
       image: twitterClone,
       live: 'https://twitterclonebyhilosthone.netlify.app/',
-      github: '#',
+      github: 'https://github.com/Hilosthone', // Replaced # with profile link
       tags: ['Next.js', 'Firebase', 'Tailwind CSS', 'TypeScript'],
     },
     {
-      id: '03',
+      id: '04', // Fixed ID
       title: "T's Campus Closet",
       description:
         'A specialized e-commerce platform for student commerce. Optimized for mobile-first shopping with fluid transitions and catalog filtering.',
       image: tCampusCloset,
       live: 'https://t-campus-closet-dem-osite.netlify.app/',
-      github: '#',
+      github: 'https://github.com/Hilosthone/T-s-Campus-Closet-Demo',
       tags: ['React', 'Node.js', 'Tailwind CSS', 'AOS'],
     },
     {
-      id: '04',
+      id: '05', // Fixed ID
       title: 'Dynamic Color Engine',
       description:
         'Advanced tool for design systems. Generates WCAG-compliant color palettes and shade variations instantly for developer workflows.',
       image: colourGenerator,
       live: 'https://react-project-9-colors-generator.netlify.app/',
-      github: '#',
+      github: 'https://github.com/Hilosthone',
       tags: ['React', 'CSS3', 'Lucide React'],
     },
   ]
@@ -58,14 +69,13 @@ export default function Projects() {
       className='bg-white dark:bg-[#0f172a] text-slate-900 dark:text-white py-24 px-6 md:px-12 lg:px-24 transition-colors duration-500 overflow-hidden'
     >
       <div className='max-w-7xl mx-auto'>
-        {/* Header Section */}
         <div className='mb-20 space-y-4'>
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             className='text-red-600 dark:text-red-500 font-bold tracking-[0.3em] text-xs uppercase'
           >
-            My Portfolio
+            Case Studies
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -73,8 +83,8 @@ export default function Projects() {
             viewport={{ once: true }}
             className='text-4xl md:text-5xl lg:text-6xl font-black'
           >
-            Featured{' '}
-            <span className='text-red-600 dark:text-red-500'>Projects</span>
+            Selected{' '}
+            <span className='text-red-600 dark:text-red-500'>Works</span>
           </motion.h2>
         </div>
 
@@ -92,28 +102,31 @@ export default function Projects() {
             >
               {/* Image Container */}
               <div className='w-full md:w-3/5 group relative'>
-                <div className='absolute -inset-1 bg-gradient-to-r from-red-600 to-red-400 rounded-3xl blur opacity-25 group-hover:opacity-60 transition duration-1000 group-hover:duration-200'></div>
+                <div className='absolute -inset-1 bg-gradient-to-r from-red-600 to-red-400 rounded-3xl blur opacity-25 group-hover:opacity-60 transition duration-1000 group-hover:duration-200' />
                 <div className='relative overflow-hidden rounded-2xl aspect-[16/10] bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/5'>
                   <Image
                     src={project.image}
                     alt={project.title}
                     fill
                     className='object-cover transition-transform duration-700 ease-in-out group-hover:scale-105'
-                    placeholder='blur'
+                    priority={index === 0} // SEO/LCP Optimization
                   />
-                  {/* Overlay on hover */}
                   <div className='absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4'>
                     <a
                       href={project.live}
                       target='_blank'
+                      rel='noopener noreferrer'
                       className='p-3 bg-white text-black rounded-full hover:bg-red-600 hover:text-white transition-colors'
+                      aria-label='View Live Project'
                     >
                       <ExternalLink size={20} />
                     </a>
                     <a
                       href={project.github}
                       target='_blank'
+                      rel='noopener noreferrer'
                       className='p-3 bg-white text-black rounded-full hover:bg-red-600 hover:text-white transition-colors'
+                      aria-label='View Github Code'
                     >
                       <Github size={20} />
                     </a>
@@ -151,6 +164,7 @@ export default function Projects() {
                   <a
                     href={project.live}
                     target='_blank'
+                    rel='noopener noreferrer'
                     className='group flex items-center gap-2 text-sm font-black uppercase tracking-tighter hover:text-red-600 dark:hover:text-red-500 transition-colors'
                   >
                     Launch Case Study

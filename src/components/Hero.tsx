@@ -1,12 +1,44 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react' // Added for Hydration Guard
+import { motion, Variants } from 'framer-motion' // Properly imported Variants
 import Image from 'next/image'
 import avartar from '../../src/public/Banner.png'
 import { FaTwitter, FaLinkedinIn, FaGithub, FaInstagram } from 'react-icons/fa'
 import { ArrowRight, Mail } from 'lucide-react'
 
+// Defined Variants outside the component to keep the render function clean
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
+}
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.8,
+      ease: 'easeOut',
+    },
+  },
+}
+
 const Hero = () => {
+  const [isMounted, setIsMounted] = useState(false)
+
+  // Ensures animations only trigger on the client to prevent Hydration errors
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   const socialLinks = [
     {
       icon: <FaGithub />,
@@ -33,7 +65,7 @@ const Hero = () => {
   return (
     <section
       id='hero'
-      className='relative flex flex-col-reverse md:flex-row items-center justify-between px-6 md:px-12 lg:px-24 py-24 min-h-screen bg-white dark:bg-[#0f172a] transition-colors duration-500 overflow-hidden'
+      className='relative flex flex-col-reverse md:flex-row items-center justify-between px-6 md:px-12 lg:px-24 py-24 min-h-screen bg-transparent transition-colors duration-500 overflow-hidden'
     >
       {/* Background Subtle Gradient */}
       <div className='absolute top-0 left-0 w-full h-full overflow-hidden -z-10'>
@@ -41,37 +73,57 @@ const Hero = () => {
       </div>
 
       {/* ===== Left Content ===== */}
-      <div
+      <motion.div
         className='md:w-1/2 space-y-8 text-center md:text-left mt-10 md:mt-0'
-        data-aos='fade-right'
-        data-aos-duration='1000'
+        initial='hidden'
+        animate={isMounted ? 'visible' : 'hidden'}
+        variants={containerVariants}
       >
         <div className='space-y-4'>
-          <h2 className='text-red-600 dark:text-red-500 font-bold tracking-[0.2em] text-sm uppercase'>
+          <motion.h2
+            variants={itemVariants}
+            className='text-red-600 dark:text-red-500 font-bold tracking-[0.2em] text-sm uppercase'
+          >
             Available for hire
-          </h2>
-          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black leading-tight text-slate-900 dark:text-white'>
+          </motion.h2>
+          <motion.h1
+            variants={itemVariants}
+            className='text-4xl sm:text-5xl lg:text-6xl font-black leading-tight text-slate-900 dark:text-white'
+          >
             Hello I’m <br />
             <span className='text-red-600 dark:text-red-500 inline-block'>
               Hilosthone Sulyman.
             </span>
-          </h1>
-          <p className='text-xl md:text-2xl font-semibold text-slate-700 dark:text-slate-200'>
-            Full-Stack Software Engineer
-          </p>
+          </motion.h1>
+          <motion.p
+            variants={itemVariants}
+            className='text-xl md:text-2xl font-semibold text-slate-700 dark:text-slate-200'
+          >
+            Full-Stack & Mobile Developer
+          </motion.p>
         </div>
 
-        <p className='text-gray-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed max-w-lg mx-auto md:mx-0'>
+        <motion.p
+          variants={itemVariants}
+          className='text-gray-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed max-w-lg mx-auto md:mx-0'
+        >
           I specialize in building scalable{' '}
           <span className='text-slate-900 dark:text-white font-bold'>
-            Full-Stack applications
+            Full-Stack and Mobile applications
           </span>{' '}
-          using the MERN stack and Next.js. Blending performance-focused backend
-          logic with intuitive, responsive design.
-        </p>
+          using the MERN stack, Next.js, and{' '}
+          <span className='text-slate-900 dark:text-white font-bold'>
+            React Native (Expo)
+          </span>
+          . Blending performance-focused logic with intuitive, cross-platform
+          design.
+        </motion.p>
 
         {/* Buttons / CTA */}
-        <div className='flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 pt-4'>
+        <motion.div
+          variants={itemVariants}
+          className='flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 pt-4'
+        >
           <a
             href='#projects'
             className='flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg shadow-red-600/20 active:scale-95 group'
@@ -88,10 +140,13 @@ const Hero = () => {
           >
             <Mail size={18} /> Let&apos;s Talk
           </a>
-        </div>
+        </motion.div>
 
         {/* Social Icons */}
-        <div className='flex justify-center md:justify-start space-x-6 pt-6'>
+        <motion.div
+          variants={itemVariants}
+          className='flex justify-center md:justify-start space-x-6 pt-6'
+        >
           {socialLinks.map((social, index) => (
             <a
               key={index}
@@ -103,19 +158,22 @@ const Hero = () => {
               {social.icon}
             </a>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* ===== Right Image ===== */}
-      <div
+      <motion.div
         className='md:w-1/2 flex justify-center md:justify-end items-center relative'
-        data-aos='zoom-in'
-        data-aos-duration='1200'
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={
+          isMounted ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
+        }
+        transition={{ duration: 1, ease: 'easeOut' }}
       >
         {/* The Glow Effect */}
         <div className='absolute inset-0 bg-red-600/10 dark:bg-red-500/20 blur-[100px] rounded-full -z-10' />
 
-        {/* Floating Animation for Image using Framer Motion (Perfect for Heroes) */}
+        {/* Floating Animation for Image */}
         <motion.div
           animate={{ y: [0, -15, 0] }}
           transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
@@ -130,7 +188,7 @@ const Hero = () => {
             priority
           />
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Scroll Down Indicator */}
       <div className='absolute bottom-10 left-1/2 -translate-x-1/2 hidden lg:block'>

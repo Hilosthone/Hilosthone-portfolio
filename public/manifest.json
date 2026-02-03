@@ -1,0 +1,21 @@
+{
+  "name": "Hilosthone Sulyman Portfolio",
+  "short_name": "Hilosthone",
+  "description": "Full-Stack & Mobile Developer Portfolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#dc2626",
+  "icons": [
+    {
+      "src": "/Hilosthone.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/Hilosthone.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}

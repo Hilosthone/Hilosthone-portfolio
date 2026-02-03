@@ -27,20 +27,6 @@ const testimonials = [
       'https://media.istockphoto.com/id/168266874/photo/smiling-executive-with-arms-crossed.jpg?s=612x612&w=0&k=20&c=4i9naD1WuDZfp8P6HHD0gFyG-94JJwavHFfW1ilR4eo=',
     text: 'Working with Hilosthone is an inspiring journey. He brings clarity, creativity, and focus to every project.',
   },
-  {
-    name: 'Miriam Adesina',
-    role: 'UI/UX Designer',
-    image:
-      'https://media.istockphoto.com/id/1136016993/photo/successful-female-graphic-designer-watching-tutorial-about-creative-ideas-at-laptop-computer.jpg?s=612x612&w=0&k=20&c=wNrie1-hgODfdYaMTgb3j1fF_7LRVXFVzjfAPhUmj-c=',
-    text: 'Hilosthone has an incredible eye for detail. His ability to merge aesthetics with functionality always amazes me.',
-  },
-  {
-    name: 'David Nwachukwu',
-    role: 'Software Engineer',
-    image:
-      'https://media.istockphoto.com/id/1439699853/photo/businessman-with-grizzled-hair-crossing-his-arms.jpg?s=612x612&w=0&k=20&c=-d7s1AeWfCXu8yCLy1_m8E1qMz1azt9fi6FQjsSLDEI=',
-    text: 'Collaborating with Hilosthone has been one of my best professional experiences. His technical depth and calm leadership make every project smoother.',
-  },
 ]
 
 export default function TestimonialCarousel() {
@@ -64,12 +50,11 @@ export default function TestimonialCarousel() {
     setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   }
 
-  // Animation Variants for the Slide
   const slideVariants = {
     initial: (direction: number) => ({
-      x: direction > 0 ? 100 : -100,
+      x: direction > 0 ? 50 : -50,
       opacity: 0,
-      filter: 'blur(10px)',
+      filter: 'blur(8px)',
     }),
     animate: {
       x: 0,
@@ -77,38 +62,38 @@ export default function TestimonialCarousel() {
       filter: 'blur(0px)',
     },
     exit: (direction: number) => ({
-      x: direction > 0 ? -100 : 100,
+      x: direction > 0 ? -50 : 50,
       opacity: 0,
-      filter: 'blur(10px)',
+      filter: 'blur(8px)',
     }),
   }
 
   return (
     <section
       id='testimonials'
-      className='py-24 bg-white dark:bg-[#0f172a] transition-colors duration-500 overflow-hidden'
+      className='py-20 bg-white dark:bg-[#0f172a] transition-colors duration-500 overflow-hidden relative'
     >
-      <div className='max-w-5xl mx-auto px-6'>
-        <div className='text-center mb-16 space-y-4'>
-          <motion.p
+      <div className='max-w-4xl mx-auto px-6'>
+        {/* Pro Header */}
+        <div className='text-center mb-12'>
+          <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            className='text-red-600 dark:text-red-500 font-bold tracking-[0.3em] text-xs uppercase'
+            className='text-red-600 dark:text-red-500 font-black tracking-[.4em] text-[10px] uppercase block mb-3'
           >
-            Social Proof
-          </motion.p>
+            Endorsements
+          </motion.span>
           <motion.h2
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className='text-4xl md:text-5xl font-black text-slate-900 dark:text-white'
+            className='text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter'
           >
-            Kind words from <span className='text-red-600'>colleagues.</span>
+            Trusted by <span className='text-red-600'>Experts.</span>
           </motion.h2>
         </div>
 
-        <div className='relative bg-slate-50/50 dark:bg-white/5 backdrop-blur-xl rounded-[2.5rem] p-8 md:p-16 border border-slate-200/50 dark:border-white/10 shadow-2xl shadow-slate-200/50 dark:shadow-none'>
-          {/* Big Quote Background Icon */}
-          <FaQuoteLeft className='absolute top-12 left-12 text-slate-200/50 dark:text-white/5 text-8xl md:text-9xl pointer-events-none' />
+        <div className='relative bg-slate-50 dark:bg-slate-900/40 rounded-[2rem] p-8 md:p-12 border border-slate-100 dark:border-white/5'>
+          <FaQuoteLeft className='absolute top-8 left-8 text-slate-200 dark:text-white/5 text-6xl pointer-events-none' />
 
           <AnimatePresence mode='wait' custom={direction}>
             <motion.div
@@ -118,34 +103,32 @@ export default function TestimonialCarousel() {
               initial='initial'
               animate='animate'
               exit='exit'
-              transition={{ duration: 0.4, ease: 'circOut' }}
-              className='relative z-10 flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12'
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className='relative z-10 flex flex-col md:flex-row items-center gap-10'
             >
-              {/* Profile Image with Irregular Shape */}
-              <div className='shrink-0'>
-                <div className='relative w-32 h-32 md:w-44 md:h-44'>
-                  <div className='absolute inset-0 bg-red-600 rotate-6 rounded-[2.5rem_0.5rem_2.5rem_0.5rem] transition-transform group-hover:rotate-12 duration-500' />
-                  <div className='relative w-full h-full overflow-hidden rounded-[2.5rem_0.5rem_2.5rem_0.5rem] border-4 border-white dark:border-slate-800 shadow-xl'>
-                    <Image
-                      src={testimonials[current].image}
-                      alt={testimonials[current].name}
-                      fill
-                      className='object-cover'
-                    />
-                  </div>
+              {/* Image Container */}
+              <div className='shrink-0 relative'>
+                <div className='absolute -inset-2 bg-red-600/20 rounded-2xl rotate-3' />
+                <div className='relative w-28 h-28 md:w-36 md:h-36 overflow-hidden rounded-2xl border-2 border-white dark:border-slate-800 shadow-xl'>
+                  <Image
+                    src={testimonials[current].image}
+                    alt={testimonials[current].name}
+                    fill
+                    className='object-cover'
+                  />
                 </div>
               </div>
 
-              {/* Text Area */}
-              <div className='flex-1 text-center md:text-left pt-4'>
-                <p className='text-xl md:text-2xl text-slate-800 dark:text-slate-200 font-medium leading-relaxed mb-8'>
+              {/* Quote Content */}
+              <div className='flex-1 text-center md:text-left'>
+                <p className='text-lg md:text-xl text-slate-700 dark:text-slate-300 font-bold leading-relaxed mb-6 italic'>
                   &ldquo;{testimonials[current].text}&rdquo;
                 </p>
                 <div>
-                  <h3 className='text-2xl font-black text-slate-900 dark:text-white'>
+                  <h3 className='text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight'>
                     {testimonials[current].name}
                   </h3>
-                  <p className='text-red-600 dark:text-red-500 font-bold text-sm tracking-widest uppercase mt-1'>
+                  <p className='text-red-600 dark:text-red-500 font-black text-[10px] uppercase tracking-[0.2em] mt-1'>
                     {testimonials[current].role}
                   </p>
                 </div>
@@ -153,10 +136,9 @@ export default function TestimonialCarousel() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Controls Footer */}
-          <div className='flex flex-col md:flex-row justify-between items-center mt-12 gap-8 border-t border-slate-200 dark:border-white/10 pt-8'>
-            {/* Progress Indicators */}
-            <div className='flex space-x-3'>
+          {/* Moderate Controls Bar */}
+          <div className='flex flex-row justify-between items-center mt-10 pt-6 border-t border-slate-200 dark:border-white/10'>
+            <div className='flex space-x-2'>
               {testimonials.map((_, index) => (
                 <button
                   key={index}
@@ -164,28 +146,27 @@ export default function TestimonialCarousel() {
                     setDirection(index > current ? 1 : -1)
                     setCurrent(index)
                   }}
-                  className={`h-1.5 rounded-full transition-all duration-500 ${
+                  className={`h-1 rounded-full transition-all duration-500 ${
                     index === current
-                      ? 'bg-red-600 w-12'
-                      : 'bg-slate-300 dark:bg-slate-700 w-4 hover:bg-slate-400'
+                      ? 'bg-red-600 w-8'
+                      : 'bg-slate-300 dark:bg-slate-800 w-2'
                   }`}
                 />
               ))}
             </div>
 
-            {/* Navigation Arrows */}
-            <div className='flex space-x-4'>
+            <div className='flex space-x-2'>
               <button
                 onClick={prevSlide}
-                className='p-4 rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-lg hover:bg-red-600 hover:text-white dark:hover:bg-red-600 transition-all active:scale-90 group'
+                className='w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white hover:bg-red-600 hover:text-white transition-all active:scale-95'
               >
-                <FaChevronLeft className='group-hover:-translate-x-1 transition-transform' />
+                <FaChevronLeft size={12} />
               </button>
               <button
                 onClick={nextSlide}
-                className='p-4 rounded-2xl bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-lg hover:bg-red-600 hover:text-white dark:hover:bg-red-600 transition-all active:scale-90 group'
+                className='w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white hover:bg-red-600 hover:text-white transition-all active:scale-95'
               >
-                <FaChevronRight className='group-hover:translate-x-1 transition-transform' />
+                <FaChevronRight size={12} />
               </button>
             </div>
           </div>

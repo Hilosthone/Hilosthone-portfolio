@@ -1,77 +1,90 @@
-'use client' // Note: AOS initialization needs a client component context
-
-import './globals.css'
-import 'aos/dist/aos.css' // Import AOS styles
-import { useEffect } from 'react'
-import AOS from 'aos'
-import { ThemeProvider } from '@/components/theme-provider'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import BackToTop from '@/components/BackToTop'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
-import Image from 'next/image'
-import Link from 'next/link'
+import ClientLayout from './ClientLayout'
+import NextTopLoader from 'nextjs-toploader'
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-// Metadata remains the same (moved to a separate file or handled by Next.js)
-// Note: In Next.js App Router, 'use client' files cannot export metadata.
-// It is better to keep the metadata in a separate 'page.tsx' or a 'metadata.ts'
+// Modern way to handle theme-color and scaling in Next.js
+export const viewport: Viewport = {
+  themeColor: '#dc2626',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Hilosthone Sulyman | Dev Portfolio',
+    template: '%s | Hilosthone',
+  },
+  description:
+    'Full-Stack Developer specializing in MERN stack, Next.js, and React Native.',
+  metadataBase: new URL('https://hilosthone-portfolio.netlify.app'),
+
+  openGraph: {
+    title: 'Hilosthone Sulyman | Portfolio',
+    description:
+      'Full-Stack & Mobile Developer building scalable applications.',
+    url: 'https://hilosthone-portfolio.netlify.app',
+    siteName: 'Hilosthone Portfolio',
+    images: [
+      {
+        url: '/Hilosthone.jpeg',
+        width: 1200,
+        height: 630,
+        alt: 'Hilosthone Sulyman Portfolio Preview',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Hilosthone Sulyman | Portfolio',
+    description: 'Full-Stack & Mobile Developer',
+    images: ['/Hilosthone.jpeg'],
+  },
+
+  manifest: '/manifest.json',
+
+  icons: {
+    icon: [
+      { url: '/Hilosthone.jpeg' },
+      { url: '/Hilosthone.jpeg', sizes: '32x32', type: 'image/jpeg' },
+    ],
+    shortcut: '/Hilosthone.jpeg',
+    apple: [{ url: '/Hilosthone.jpeg', sizes: '180x180', type: 'image/jpeg' }],
+  },
+}
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  useEffect(() => {
-    AOS.init({
-      duration: 1000, // Animation duration in ms
-      once: true, // Whether animation should happen only once - while scrolling down
-      easing: 'ease-in-out',
-    })
-  }, [])
-
   return (
     <html lang='en' suppressHydrationWarning className='scroll-smooth'>
       <body
-        className={`${inter.className} min-h-screen w-full overflow-x-hidden bg-white dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 transition-colors duration-300 flex flex-col`}
+        className={`${inter.className} bg-white dark:bg-[#0f172a] selection:bg-red-500/30 overflow-x-hidden`}
       >
-        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <Header />
+        {/* The YouTube-style top loading bar in your brand Red */}
+        <NextTopLoader
+          color='#dc2626'
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing='ease'
+          speed={200}
+          shadow='0 0 10px #dc2626,0 0 5px #dc2626'
+        />
 
-          <div className='fixed bottom-24 right-6 md:bottom-32 md:left-8 z-40'>
-            <Link
-              href='https://linkedin.com/in/hilosthone'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='group relative block'
-            >
-              <span className='absolute -top-1 -right-1 flex h-4 w-4 z-50'>
-                <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75'></span>
-                <span className='relative inline-flex rounded-full h-4 w-4 bg-red-600'></span>
-              </span>
-
-              <div className='absolute -inset-1 bg-gradient-to-r from-red-600 to-rose-400 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000' />
-
-              <div className='relative w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white dark:border-slate-800 overflow-hidden shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-red-500'>
-                <Image
-                  src='/Hilosthone.jpeg'
-                  alt='Hilosthone Portrait'
-                  fill
-                  className='object-cover'
-                  priority
-                />
-              </div>
-            </Link>
-          </div>
-
-          <main className='flex-grow w-full max-w-[100vw] overflow-x-hidden'>
-            {children}
-          </main>
-
-          <Footer />
-          <BackToTop />
-        </ThemeProvider>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   )

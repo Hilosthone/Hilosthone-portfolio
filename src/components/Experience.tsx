@@ -1,10 +1,49 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { Briefcase, GraduationCap, PenTool, Code2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { motion, Variants } from 'framer-motion'
+import {
+  Briefcase,
+  GraduationCap,
+  PenTool,
+  Code2,
+  Smartphone,
+  Globe,
+  Calculator,
+} from 'lucide-react'
 
 export default function Experience() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   const experiences = [
+    {
+      role: 'Mobile Developer',
+      company: 'Taxlator',
+      period: '2026 – Present',
+      icon: <Calculator size={16} />,
+      description:
+        'Engineering a specialized mobile utility for precise tax computations. Implementing complex fiscal logic to automate PAYE, VAT, and other tax types for individuals and businesses.',
+    },
+    {
+      role: 'Mobile Developer',
+      company: 'JustXend',
+      period: '2026 – Present',
+      icon: <Smartphone size={16} />,
+      description:
+        'Developing a cross-border fintech application handling multi-currency transactions with automated conversion logic. Engineering a seamless experience where senders and receivers interact regardless of their local base currencies.',
+    },
+    {
+      role: 'Full Stack Developer',
+      company: 'Propifix',
+      period: '2026 – Present',
+      icon: <Globe size={16} />,
+      description:
+        'Building a comprehensive Nigerian real estate ecosystem connecting users, landlords, caretakers, and artisans. Implementing complex role-based workflows and real-time management tools for the property sector.',
+    },
     {
       role: 'Full-Stack Software Engineer Intern',
       company: 'ResilienceNG',
@@ -49,15 +88,14 @@ export default function Experience() {
         <div className='mb-16'>
           <motion.span
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            animate={isMounted ? { opacity: 1 } : { opacity: 0 }}
             className='text-red-600 dark:text-red-500 font-black tracking-[.4em] text-[10px] uppercase block mb-3'
           >
             History
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            animate={isMounted ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
             className='text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter'
           >
             Professional <span className='text-red-600'>Journey.</span>
@@ -73,7 +111,7 @@ export default function Experience() {
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                whileInView={isMounted ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 className={`relative flex flex-col md:flex-row items-start gap-8 ${
@@ -90,7 +128,6 @@ export default function Experience() {
                 {/* Content Card */}
                 <div className='w-full md:w-[45%] pl-12 md:pl-0'>
                   <div className='group relative p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 hover:border-red-600/30 transition-all duration-300'>
-                    {/* Glowing indicator on hover */}
                     <div className='absolute top-6 -left-px w-1 h-8 bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity' />
 
                     <div className='flex justify-between items-start mb-2'>
@@ -115,7 +152,6 @@ export default function Experience() {
                   </div>
                 </div>
 
-                {/* Empty spacer for desktop symmetry */}
                 <div className='hidden md:block md:w-[45%]' />
               </motion.div>
             ))}

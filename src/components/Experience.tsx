@@ -30,6 +30,14 @@ export default function Experience() {
         'Founded and lead GleamLearn, an AI-powered learning platform transforming educational materials into interactive lessons, quizzes, and intelligent tutoring experiences. Drive product strategy, technical architecture, and end-to-end software development across the platform.',
     },
     {
+      role: 'Full Stack Engineer',
+      company: 'BuildON',
+      period: '2026 – Present',
+      icon: <Code2 size={16} />,
+      description:
+        'Building cutting-edge AI products, robust B2B platforms, and scalable web solutions. Architecting end-to-end systems that deliver performance, speed, and exceptional user experiences for diverse enterprise and consumer clients.',
+    },
+    {
       role: 'Mobile Developer',
       company: 'Taxlator',
       period: '2026 – Present',
@@ -91,7 +99,7 @@ export default function Experience() {
       period: '2026 – Present',
       icon: <Smartphone size={16} />,
       description:
-      'Contributing to mobile application development at SkiFlux, building responsive and intuitive mobile experiences with a focus on usability, maintainability, and reliable functionality.',
+        'Contributing to mobile application development at SkiFlux, building responsive and intuitive mobile experiences with a focus on usability, maintainability, and reliable functionality.',
     },
   ]
 

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, Variants } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { EASE_OUT, STAGGER } from '@/lib/animations'
 import {
   Briefcase,
   GraduationCap,
@@ -112,7 +113,11 @@ export default function Experience() {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={isMounted ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * STAGGER,
+                  ease: EASE_OUT,
+                }}
                 viewport={{ once: true }}
                 className={`relative flex flex-col md:flex-row items-start gap-8 ${
                   index % 2 === 0 ? 'md:flex-row-reverse' : ''
@@ -127,8 +132,8 @@ export default function Experience() {
 
                 {/* Content Card */}
                 <div className='w-full md:w-[45%] pl-12 md:pl-0'>
-                  <div className='group relative p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 hover:border-red-600/30 transition-all duration-300'>
-                    <div className='absolute top-6 -left-px w-1 h-8 bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity' />
+                  <div className='group relative p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 hover:border-red-600/30 hover:-translate-y-1 hover:shadow-xl hover:shadow-red-600/5 transition-[transform,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]'>
+                    <div className='absolute top-6 -left-px w-1 h-8 bg-red-600 origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]' />
 
                     <div className='flex justify-between items-start mb-2'>
                       <span className='text-[10px] font-black text-red-600 dark:text-red-500 uppercase tracking-widest'>

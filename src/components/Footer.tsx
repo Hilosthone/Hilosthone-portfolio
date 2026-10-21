@@ -88,7 +88,7 @@ export default function Footer() {
                 </a>
               ))}
               <a
-                href='mailto:solihullahsulyan@gmail.com'
+                href='mailto:hilosthonesulyan@gmail.com'
                 className='p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-white hover:bg-red-600 hover:border-red-600 transition-all duration-300'
               >
                 <Mail size={18} />

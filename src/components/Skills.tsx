@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { EASE_OUT, SPRING, VIEWPORT } from '@/lib/animations'
 import {
   FaHtml5,
   FaCss3Alt,
@@ -76,6 +77,7 @@ const Skills = () => {
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
+            viewport={VIEWPORT}
             className='text-red-600 dark:text-red-500 font-black tracking-[.4em] text-[10px] uppercase block mb-4'
           >
             Technical Arsenal
@@ -83,7 +85,8 @@ const Skills = () => {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={VIEWPORT}
+            transition={{ duration: 0.8, ease: EASE_OUT }}
             className='text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tighter'
           >
             Mastered{' '}
@@ -109,13 +112,15 @@ const Skills = () => {
               key={index}
               variants={{
                 hidden: { opacity: 0, y: 10 },
-                visible: { opacity: 1, y: 0 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.5, ease: EASE_OUT },
+                },
               }}
-              whileHover={{
-                y: -8,
-                transition: { duration: 0.2, ease: 'easeOut' },
-              }}
-              className='group relative bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 rounded-2xl p-6 flex flex-col items-center justify-center transition-all hover:shadow-xl hover:shadow-red-600/10 hover:border-red-600/30'
+              whileHover={{ y: -8, transition: SPRING.snappy }}
+              whileTap={{ scale: 0.97 }}
+              className='group relative bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 rounded-2xl p-6 flex flex-col items-center justify-center transition-[border-color,box-shadow] duration-500 hover:shadow-xl hover:shadow-red-600/10 hover:border-red-600/30'
             >
               <div className='text-4xl md:text-5xl relative z-10 transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-[0_0_15px_rgba(220,38,38,0.3)]'>
                 {skill.icon}

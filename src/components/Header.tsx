@@ -5,12 +5,23 @@ import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion' //
 import { Download, Menu, X, ArrowRight } from 'lucide-react'
 import { FiSun, FiMoon } from 'react-icons/fi'
 import { useTheme } from 'next-themes'
+import Magnetic from './Magnetic'
+import { EASE_OUT, SPRING, STAGGER } from '@/lib/animations'
+
+// Defined at module scope so the scroll effect isn't re-subscribed every render
+const links = [
+  { href: '#about', label: 'About' },
+  { href: '#skills', label: 'Skills' },
+  { href: '#experience', label: 'Experience' },
+  { href: '#projects', label: 'Projects' },
+  { href: '#contact', label: 'Contact' },
+]
 
 export default function Header() {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [scrollY, setScrollY] = useState(0)
+  const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState<string>('about')
 
   // Scroll Progress Logic
@@ -21,24 +32,18 @@ export default function Header() {
     restDelta: 0.001,
   })
 
-  const links = [
-    { href: '#about', label: 'About' },
-    { href: '#skills', label: 'Skills' },
-    { href: '#experience', label: 'Experience' },
-    { href: '#projects', label: 'Projects' },
-    { href: '#contact', label: 'Contact' },
-  ]
-
   useEffect(() => {
     setMounted(true)
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-      const sectionElements = links.map((link) =>
-        document.getElementById(link.href.substring(1))
-      )
+    let frame = 0
+
+    const update = () => {
+      frame = 0
+      // Boolean state: React skips re-renders while the value is unchanged
+      setIsScrolled(window.scrollY > 50)
       const scrollPosition = window.scrollY + 120
 
-      sectionElements.forEach((el) => {
+      links.forEach((link) => {
+        const el = document.getElementById(link.href.substring(1))
         if (
           el &&
           scrollPosition >= el.offsetTop &&
@@ -48,9 +53,29 @@ export default function Header() {
         }
       })
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [links])
+
+    // Throttle to one measurement per animation frame
+    const handleScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      cancelAnimationFrame(frame)
+    }
+  }, [])
+
+  // Close the mobile menu with Escape
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [menuOpen])
 
   if (!mounted) return null
 
@@ -66,11 +91,12 @@ export default function Header() {
         <motion.div
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, ease: EASE_OUT }}
           className={`
             relative flex items-center justify-between w-full max-w-6xl px-6 py-2.5
             transition-all duration-500 ease-in-out
             ${
-              scrollY > 50
+              isScrolled
                 ? 'rounded-full border border-slate-200/50 dark:border-white/10 bg-white/80 dark:bg-slate-900/70 backdrop-blur-md shadow-xl'
                 : 'rounded-none bg-transparent'
             }
@@ -78,7 +104,7 @@ export default function Header() {
         >
           {/* Logo */}
           <a href='#' className='group flex items-center gap-2'>
-            <div className='w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-red-500/20 transition-transform group-hover:rotate-12'>
+            <div className='w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-red-500/20 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-12 group-hover:scale-105'>
               H
             </div>
             <h1 className='text-lg font-bold tracking-tight text-slate-900 dark:text-white'>
@@ -94,10 +120,11 @@ export default function Header() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
+                  aria-current={isActive ? 'location' : undefined}
+                  className={`relative px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-300 ${
                     isActive
                       ? 'text-white'
-                      : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white'
+                      : 'text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/70 dark:hover:bg-white/5'
                   }`}
                 >
                   <span className='relative z-10'>{link.label}</span>
@@ -105,11 +132,7 @@ export default function Header() {
                     <motion.span
                       layoutId='nav-pill'
                       className='absolute inset-0 bg-red-600 rounded-full shadow-md shadow-red-500/20'
-                      transition={{
-                        type: 'spring',
-                        duration: 0.6,
-                        bounce: 0.2,
-                      }}
+                      transition={SPRING.snappy}
                     />
                   )}
                 </a>
@@ -119,28 +142,49 @@ export default function Header() {
 
           {/* Controls */}
           <div className='flex items-center gap-2'>
-            <button
+            <motion.button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className='p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-colors text-slate-700 dark:text-slate-300'
+              aria-label={
+                theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
+              }
+              whileTap={{ scale: 0.9 }}
+              transition={SPRING.snappy}
+              className='p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-colors text-slate-700 dark:text-slate-300 overflow-hidden'
             >
-              {theme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
-            </button>
+              <AnimatePresence mode='wait' initial={false}>
+                <motion.span
+                  key={theme === 'dark' ? 'sun' : 'moon'}
+                  initial={{ rotate: -90, opacity: 0, scale: 0.6 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: 90, opacity: 0, scale: 0.6 }}
+                  transition={{ duration: 0.25, ease: EASE_OUT }}
+                  className='block'
+                >
+                  {theme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
+                </motion.span>
+              </AnimatePresence>
+            </motion.button>
 
-            <a
-              href='https://docs.google.com/document/d/13WtzPaF3GVk0-ZhLvyvf--6h8UD84fq2bAqGim5_g0M/edit'
-              target='_blank'
-              className='hidden sm:flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-black px-4 py-2 rounded-full font-bold text-xs hover:bg-red-600 dark:hover:bg-red-500 hover:text-white transition-all group shadow-lg active:scale-95'
-            >
-              Resume{' '}
-              <Download
-                size={14}
-                className='group-hover:translate-y-0.5 transition-transform'
-              />
-            </a>
+            <Magnetic className='hidden sm:inline-flex' strength={0.2}>
+              <a
+                href='https://docs.google.com/document/d/13WtzPaF3GVk0-ZhLvyvf--6h8UD84fq2bAqGim5_g0M/edit'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-black px-4 py-2 rounded-full font-bold text-xs hover:bg-red-600 dark:hover:bg-red-500 hover:text-white transition-[background-color,color,transform] duration-300 group shadow-lg active:scale-95'
+              >
+                Resume{' '}
+                <Download
+                  size={14}
+                  className='group-hover:translate-y-0.5 transition-transform duration-300'
+                />
+              </a>
+            </Magnetic>
 
             <button
               onClick={() => setMenuOpen(true)}
-              className='lg:hidden p-2 text-slate-900 dark:text-white'
+              aria-label='Open navigation menu'
+              aria-expanded={menuOpen}
+              className='lg:hidden p-2 text-slate-900 dark:text-white rounded-full active:scale-90 transition-transform'
             >
               <Menu size={24} />
             </button>
@@ -163,7 +207,10 @@ export default function Header() {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              transition={SPRING.soft}
+              role='dialog'
+              aria-modal='true'
+              aria-label='Navigation menu'
               className='fixed top-0 right-0 h-full w-[300px] bg-white dark:bg-[#0f172a] z-[70] shadow-2xl p-6 lg:hidden flex flex-col'
             >
               <div className='flex justify-between items-center mb-8 px-2'>
@@ -172,51 +219,73 @@ export default function Header() {
                 </span>
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className='p-2 rounded-full bg-slate-100 dark:bg-white/5 dark:text-white'
+                  aria-label='Close navigation menu'
+                  autoFocus
+                  className='p-2 rounded-full bg-slate-100 dark:bg-white/5 dark:text-white hover:rotate-90 transition-transform duration-300'
                 >
                   <X size={20} />
                 </button>
               </div>
 
-              <nav className='flex flex-col gap-2'>
+              <motion.nav
+                className='flex flex-col gap-2'
+                initial='hidden'
+                animate='visible'
+                variants={{
+                  hidden: {},
+                  visible: {
+                    transition: { staggerChildren: STAGGER, delayChildren: 0.1 },
+                  },
+                }}
+              >
                 {links.map((link) => {
                   const isActive = activeSection === link.href.substring(1)
                   return (
-                    <a
+                    <motion.a
                       key={link.href}
                       href={link.href}
                       onClick={() => setMenuOpen(false)}
+                      aria-current={isActive ? 'location' : undefined}
+                      variants={{
+                        hidden: { opacity: 0, x: 24 },
+                        visible: {
+                          opacity: 1,
+                          x: 0,
+                          transition: { duration: 0.5, ease: EASE_OUT },
+                        },
+                      }}
                       className={`relative px-5 py-4 rounded-xl text-lg font-bold transition-all flex items-center justify-between group overflow-hidden ${
                         isActive
                           ? 'text-white'
-                          : 'text-slate-600 dark:text-slate-400'
+                          : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-white/5'
                       }`}
                     >
                       {isActive && (
                         <motion.span
                           layoutId='active-pill-mobile'
                           className='absolute inset-0 bg-red-600 z-0'
-                          transition={{ type: 'spring', duration: 0.6 }}
+                          transition={SPRING.snappy}
                         />
                       )}
                       <span className='relative z-10'>{link.label}</span>
                       <ArrowRight
                         size={20}
-                        className={`relative z-10 transition-all ${
+                        className={`relative z-10 transition-all duration-300 ${
                           isActive
                             ? 'translate-x-0 opacity-100'
                             : '-translate-x-4 opacity-0'
                         }`}
                       />
-                    </a>
+                    </motion.a>
                   )
                 })}
-              </nav>
+              </motion.nav>
 
               <div className='mt-auto space-y-6 pt-6 border-t border-slate-100 dark:border-white/5'>
                 <a
                   href='https://docs.google.com/document/d/13WtzPaF3GVk0-ZhLvyvf--6h8UD84fq2bAqGim5_g0M/edit'
                   target='_blank'
+                  rel='noopener noreferrer'
                   className='flex justify-center items-center gap-2 bg-red-600 text-white py-4 rounded-2xl font-bold w-full shadow-lg shadow-red-600/20 active:scale-95 transition-transform'
                 >
                   Download Resume <Download size={18} />
@@ -226,7 +295,7 @@ export default function Header() {
                     Get In Touch
                   </p>
                   <p className='text-sm font-medium dark:text-white mt-1'>
-                    solihullahsulyan@gmail.com
+                    hilosthonesulyan@gmail.com
                   </p>
                 </div>
               </div>

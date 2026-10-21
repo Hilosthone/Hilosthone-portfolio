@@ -22,6 +22,14 @@ export default function Experience() {
 
   const experiences = [
     {
+      role: 'Founder, CEO & Software Engineer',
+      company: 'GleamLearn',
+      period: '2026 – Present',
+      icon: <Code2 size={16} />,
+      description:
+        'Founded and lead GleamLearn, an AI-powered learning platform transforming educational materials into interactive lessons, quizzes, and intelligent tutoring experiences. Drive product strategy, technical architecture, and end-to-end software development across the platform.',
+    },
+    {
       role: 'Mobile Developer',
       company: 'Taxlator',
       period: '2026 – Present',
@@ -76,6 +84,14 @@ export default function Experience() {
       icon: <PenTool size={16} />,
       description:
         'Crafting intuitive interfaces using Figma and Framer Motion, focusing on responsive, accessible, and high-conversion layouts.',
+    },
+    {
+      role: 'Mobile Developer',
+      company: 'SkiFlux',
+      period: '2026 – Present',
+      icon: <Smartphone size={16} />,
+      description:
+      'Contributing to mobile application development at SkiFlux, building responsive and intuitive mobile experiences with a focus on usability, maintainability, and reliable functionality.',
     },
   ]
 

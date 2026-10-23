@@ -226,14 +226,17 @@ const testimonials = [
 export default function TestimonialCarousel() {
   const [current, setCurrent] = useState(0)
   const [direction, setDirection] = useState(0)
+  // Auto-advance pauses while the reader is hovering or focused inside
+  const [paused, setPaused] = useState(false)
 
   useEffect(() => {
+    if (paused) return
     const timer = setInterval(() => {
       setDirection(1)
       setCurrent((prev) => (prev + 1) % testimonials.length)
     }, 10000)
     return () => clearInterval(timer)
-  }, [])
+  }, [paused])
 
   const nextSlide = () => {
     setDirection(1)
@@ -273,6 +276,7 @@ export default function TestimonialCarousel() {
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
             className='text-red-600 dark:text-red-500 font-black tracking-[.4em] text-[10px] uppercase block mb-3'
           >
             Endorsements
@@ -280,13 +284,22 @@ export default function TestimonialCarousel() {
           <motion.h2
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             className='text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter'
           >
             Trusted by <span className='text-red-600'>Experts.</span>
           </motion.h2>
         </div>
 
-        <div className='relative bg-slate-50 dark:bg-slate-900/40 rounded-[2rem] p-8 md:p-12 border border-slate-100 dark:border-white/5'>
+        <div
+          onPointerEnter={() => setPaused(true)}
+          onPointerLeave={() => setPaused(false)}
+          onFocusCapture={() => setPaused(true)}
+          onBlurCapture={() => setPaused(false)}
+          aria-roledescription='carousel'
+          aria-label='Testimonials'
+          className='relative bg-slate-50 dark:bg-slate-900/40 rounded-[2rem] p-8 md:p-12 border border-slate-100 dark:border-white/5'
+        >
           <FaQuoteLeft className='absolute top-8 left-8 text-slate-200 dark:text-white/5 text-6xl pointer-events-none' />
 
           <AnimatePresence mode='wait' custom={direction}>
@@ -340,6 +353,8 @@ export default function TestimonialCarousel() {
                     setDirection(index > current ? 1 : -1)
                     setCurrent(index)
                   }}
+                  aria-label={`Show testimonial ${index + 1} of ${testimonials.length}`}
+                  aria-current={index === current ? 'true' : undefined}
                   className={`h-1 rounded-full transition-all duration-500 ${
                     index === current
                       ? 'bg-red-600 w-8'
@@ -352,12 +367,14 @@ export default function TestimonialCarousel() {
             <div className='flex space-x-2'>
               <button
                 onClick={prevSlide}
+                aria-label='Previous testimonial'
                 className='w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white hover:bg-red-600 hover:text-white transition-all active:scale-95'
               >
                 <FaChevronLeft size={12} />
               </button>
               <button
                 onClick={nextSlide}
+                aria-label='Next testimonial'
                 className='w-10 h-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-950 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-white hover:bg-red-600 hover:text-white transition-all active:scale-95'
               >
                 <FaChevronRight size={12} />

@@ -1,7 +1,7 @@
 //src/components/Projects.tsx
 'use client'
 
-import React, { useRef } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import {
@@ -15,6 +15,7 @@ import {
 import { FaGithub } from 'react-icons/fa'
 
 import Magnetic from './Magnetic'
+import TiltCard from './motion/TiltCard'
 import {
   AI_PROJECTS,
   FEATURED_PROJECTS,
@@ -22,9 +23,9 @@ import {
   type Project,
 } from '@/lib/data'
 import {
-  SPRING,
   VIEWPORT,
   fadeIn,
+  fadeSide,
   fadeUp,
   staggerContainer,
 } from '@/lib/animations'
@@ -174,7 +175,7 @@ const ProjectCard = ({
 
   return (
     <motion.article
-      variants={fadeUp}
+      variants={staggerContainer(0.12)}
       initial='hidden'
       whileInView='visible'
       viewport={VIEWPORT}
@@ -182,40 +183,60 @@ const ProjectCard = ({
     >
       {/* Project Image Viewport */}
       <motion.div
-        className='w-full md:w-1/2 group relative'
-        whileHover={{ y: -6 }}
-        transition={SPRING.soft}
+        variants={fadeSide(isEven ? 'right' : 'left')}
+        className='w-full md:w-1/2'
       >
-        <div className='absolute -inset-2 bg-gradient-to-tr from-red-600/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
-        <div className='relative overflow-hidden rounded-xl aspect-video bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-sm group-hover:shadow-2xl group-hover:shadow-red-600/10 transition-shadow duration-500'>
-          {project.image ? (
-            <div
-              className='absolute inset-0'
-              style={
-                project.imageCrop && {
-                  transform: `scale(${project.imageCrop.scale})`,
-                  transformOrigin: project.imageCrop.origin,
+        <TiltCard
+          max={featured ? 4 : 3}
+          className='group rounded-xl [transform-style:preserve-3d]'
+        >
+          {/* Depth plate — sits behind the screenshot, so tilting reveals parallax */}
+          <div
+            aria-hidden
+            className='absolute inset-0 rounded-2xl bg-gradient-to-tr from-red-600/25 via-red-600/5 to-transparent border border-red-600/10 opacity-60 group-hover:opacity-100 transition-opacity duration-500'
+            style={{ transform: 'translate3d(14px, 14px, -40px)' }}
+          />
+          <div className='relative overflow-hidden rounded-xl aspect-video bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-sm group-hover:shadow-2xl group-hover:shadow-red-600/10 transition-shadow duration-500'>
+            {project.image ? (
+              <div
+                className='absolute inset-0'
+                style={
+                  project.imageCrop && {
+                    transform: `scale(${project.imageCrop.scale})`,
+                    transformOrigin: project.imageCrop.origin,
+                  }
                 }
-              }
+              >
+                <Image
+                  src={project.image}
+                  alt={`${project.title} screenshot`}
+                  fill
+                  sizes='(max-width: 768px) 100vw, 50vw'
+                  className='object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]'
+                  placeholder='blur'
+                />
+              </div>
+            ) : (
+              <ProjectFallback project={project} />
+            )}
+            <ProjectOverlay live={project.live} github={project.githubPrivate ? undefined : project.github} />
+          </div>
+
+          {/* Floating chip — lifted toward the viewer on featured cards */}
+          {featured && (
+            <span
+              aria-hidden
+              className='absolute -top-3 left-5 px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-lg text-[9px] font-black uppercase tracking-[0.25em] text-red-600 dark:text-red-500 pointer-events-none'
+              style={{ transform: 'translateZ(36px)' }}
             >
-              <Image
-                src={project.image}
-                alt={`${project.title} screenshot`}
-                fill
-                sizes='(max-width: 768px) 100vw, 50vw'
-                className='object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]'
-                placeholder='blur'
-              />
-            </div>
-          ) : (
-            <ProjectFallback project={project} />
+              {project.category.split('·')[0].trim()}
+            </span>
           )}
-          <ProjectOverlay live={project.live} github={project.githubPrivate ? undefined : project.github} />
-        </div>
+          </TiltCard>
       </motion.div>
 
       {/* Project Metadata */}
-      <div className='w-full md:w-1/2 space-y-5'>
+      <motion.div variants={fadeUp} className='w-full md:w-1/2 space-y-5'>
         <div className='space-y-1'>
           <div className='flex flex-wrap items-center gap-x-3 gap-y-1'>
             <span className='text-red-600 font-black text-xs tracking-widest uppercase'>
@@ -280,6 +301,7 @@ const ProjectCard = ({
                 href={project.live}
                 target='_blank'
                 rel='noopener noreferrer'
+                aria-label={`${project.title} live demo`}
                 className='group/link inline-flex items-center gap-2 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-900 dark:text-white hover:text-red-600 dark:hover:text-red-500 transition-colors'
               >
                 Live Demo
@@ -292,7 +314,7 @@ const ProjectCard = ({
           )}
           <GithubAction project={project} />
         </div>
-      </div>
+      </motion.div>
     </motion.article>
   )
 }
@@ -301,35 +323,9 @@ const ProjectCard = ({
  * Compact card for the AI applications grid
  */
 const AIProjectCard = ({ project }: { project: Project }) => {
-  const ref = useRef<HTMLDivElement>(null)
-
-  // Cursor-following highlight driven by CSS variables — no re-renders
-  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const el = ref.current
-    if (!el || e.pointerType !== 'mouse') return
-    const rect = el.getBoundingClientRect()
-    el.style.setProperty('--spot-x', `${e.clientX - rect.left}px`)
-    el.style.setProperty('--spot-y', `${e.clientY - rect.top}px`)
-  }
-
   return (
     <motion.li variants={fadeUp} className='h-full'>
-      <motion.div
-        ref={ref}
-        onPointerMove={handlePointerMove}
-        whileHover={{ y: -6 }}
-        transition={SPRING.soft}
-        className='group relative h-full flex flex-col p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 hover:border-red-600/30 hover:shadow-xl hover:shadow-red-600/5 transition-[border-color,box-shadow] duration-500 overflow-hidden'
-      >
-        <div
-          aria-hidden
-          className='pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500'
-          style={{
-            background:
-              'radial-gradient(280px circle at var(--spot-x, 50%) var(--spot-y, 0%), rgba(220, 38, 38, 0.07), transparent 70%)',
-          }}
-        />
-
+      <TiltCard className='group h-full flex flex-col p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 hover:border-red-600/30 hover:shadow-xl hover:shadow-red-600/5 transition-[border-color,box-shadow] duration-500 overflow-hidden'>
         <div className='relative flex items-center gap-3 mb-4'>
           <div className='w-10 h-10 shrink-0 bg-red-600/10 rounded-xl flex items-center justify-center group-hover:bg-red-600 transition-colors duration-300'>
             <Sparkles
@@ -354,7 +350,11 @@ const AIProjectCard = ({ project }: { project: Project }) => {
 
           <div className='flex flex-wrap items-center gap-x-5 gap-y-2 pt-4 border-t border-slate-200/70 dark:border-white/5'>
             {project.live && (
-              <CardLink href={project.live} label='Live'>
+              <CardLink
+                href={project.live}
+                label='Live'
+                ariaLabel={`${project.title} live demo`}
+              >
                 <ArrowUpRight size={13} />
               </CardLink>
             )}
@@ -378,7 +378,7 @@ const AIProjectCard = ({ project }: { project: Project }) => {
             )}
           </div>
         </div>
-      </motion.div>
+      </TiltCard>
     </motion.li>
   )
 }
@@ -413,7 +413,7 @@ const TagList = ({ tags }: { tags: string[] }) => (
     {tags.map((tag) => (
       <span
         key={tag}
-        className='px-2 py-1 text-[9px] font-black uppercase tracking-widest bg-slate-50 dark:bg-white/5 text-slate-500 dark:text-slate-400 rounded border border-slate-200 dark:border-white/10 hover:border-red-600/40 hover:text-slate-900 dark:hover:text-white transition-colors duration-300'
+        className='px-2 py-1 text-[9px] font-black uppercase tracking-widest bg-slate-50 dark:bg-white/5 text-slate-500 dark:text-slate-400 rounded border border-slate-200 dark:border-white/10 hover:border-red-600/40 hover:text-slate-900 dark:hover:text-white hover:-translate-y-0.5 transition-[color,border-color,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'
       >
         {tag}
       </span>

@@ -6,13 +6,11 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-// Modern way to handle theme-color and scaling in Next.js
+// Pinch-zoom stays enabled — locking it fails WCAG 1.4.4 (Resize Text)
 export const viewport: Viewport = {
   themeColor: '#dc2626',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 }
 
 export const metadata: Metadata = {
@@ -67,7 +65,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang='en' suppressHydrationWarning className='scroll-smooth'>
+    <html lang='en' suppressHydrationWarning className='scroll-smooth relative'>
       <body
         className={`${inter.className} bg-white dark:bg-[#0f172a] selection:bg-red-500/30 overflow-x-hidden`}
       >

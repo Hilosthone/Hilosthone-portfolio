@@ -236,37 +236,26 @@
 
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
-import { motion, Variants } from 'framer-motion'
+import { useRef } from 'react'
+import { motion } from 'framer-motion'
 import Image from 'next/image'
 import avartar from '../public/avartar.png'
 import { CheckCircle2, ChevronRight, ChevronLeft } from 'lucide-react'
+import TiltCard from './motion/TiltCard'
+import {
+  VIEWPORT,
+  fadeIn,
+  fadeSide,
+  fadeUp,
+  staggerContainer,
+} from '@/lib/animations'
 
 // Animation Variants
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-}
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: 'easeOut' },
-  },
-}
+const containerVariants = staggerContainer(0.1, 0.2)
+const itemVariants = fadeUp
 
 export default function AboutMe() {
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
 
   const skillCategories = [
     {
@@ -320,23 +309,37 @@ export default function AboutMe() {
     >
       {/* IMAGE SECTION */}
       <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        whileInView={isMounted ? { opacity: 1, x: 0 } : {}}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.8 }}
+        variants={fadeSide('left')}
+        initial='hidden'
+        whileInView='visible'
+        viewport={VIEWPORT}
         className='hidden lg:flex w-full lg:w-[35%] justify-center lg:justify-start'
       >
-        <div className='relative group'>
-          <div className='absolute -inset-4 border border-red-600/20 rounded-[2rem] -rotate-3 transition-transform group-hover:rotate-0 duration-500' />
+        <TiltCard
+          max={6}
+          glare={false}
+          className='group rounded-[2rem] [transform-style:preserve-3d]'
+        >
+          {/* Frame and glow sit deeper than the portrait, so tilt adds parallax */}
+          <div
+            aria-hidden
+            className='absolute -inset-4 border border-red-600/20 rounded-[2rem] -rotate-3 transition-[rotate,border-color] group-hover:rotate-0 group-hover:border-red-600/40 duration-500'
+            style={{ transform: 'translateZ(-30px)' }}
+          />
+          <div
+            aria-hidden
+            className='absolute inset-6 bg-red-600/10 dark:bg-red-500/15 blur-3xl rounded-full'
+            style={{ transform: 'translateZ(-60px)' }}
+          />
           <Image
             src={avartar}
             alt='Hilosthone Sulyman'
             width={340}
             height={340}
-            className='relative z-10 object-contain w-[260px] lg:w-[340px] drop-shadow-2xl'
-            priority
+            className='relative z-10 object-contain w-[260px] lg:w-[340px] h-auto drop-shadow-2xl'
+            style={{ transform: 'translateZ(24px)' }}
           />
-        </div>
+        </TiltCard>
       </motion.div>
 
       {/* TEXT SECTION */}
@@ -344,8 +347,8 @@ export default function AboutMe() {
         <motion.div
           className='space-y-4'
           initial='hidden'
-          whileInView={isMounted ? 'visible' : 'hidden'}
-          viewport={{ once: true }}
+          whileInView='visible'
+          viewport={VIEWPORT}
           variants={containerVariants}
         >
           <motion.h2
@@ -378,13 +381,15 @@ export default function AboutMe() {
             <div className='flex gap-2'>
               <button
                 onClick={() => scroll('left')}
-                className='p-2 bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-red-600 hover:text-white transition-all shadow-sm'
+                aria-label='Previous skill group'
+                className='p-2 bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-red-600 hover:text-white active:scale-90 transition-all shadow-sm'
               >
                 <ChevronLeft size={16} />
               </button>
               <button
                 onClick={() => scroll('right')}
-                className='p-2 bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-red-600 hover:text-white transition-all shadow-sm'
+                aria-label='Next skill group'
+                className='p-2 bg-slate-100 dark:bg-slate-800 rounded-lg hover:bg-red-600 hover:text-white active:scale-90 transition-all shadow-sm'
               >
                 <ChevronRight size={16} />
               </button>
@@ -394,8 +399,8 @@ export default function AboutMe() {
           <motion.div
             ref={scrollRef}
             initial='hidden'
-            whileInView={isMounted ? 'visible' : 'hidden'}
-            viewport={{ once: true }}
+            whileInView='visible'
+            viewport={VIEWPORT}
             variants={containerVariants}
             className='flex lg:flex-row lg:flex-wrap gap-5 xl:gap-6 overflow-x-auto lg:overflow-visible snap-x snap-mandatory scrollbar-hide pb-4'
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -404,7 +409,7 @@ export default function AboutMe() {
               <motion.div
                 key={catIndex}
                 variants={itemVariants}
-                className={`min-w-[90%] sm:min-w-[48%] lg:min-w-0 snap-center bg-slate-50 dark:bg-slate-900/40 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 transition-all hover:border-red-600/40 hover:bg-white dark:hover:bg-slate-900/60 hover:shadow-2xl hover:shadow-red-600/5 ${category.widthClass}`}
+                className={`min-w-[90%] sm:min-w-[48%] lg:min-w-0 snap-center bg-slate-50 dark:bg-slate-900/40 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 transition-[border-color,background-color,box-shadow,translate] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hover:-translate-y-1 hover:border-red-600/40 hover:bg-white dark:hover:bg-slate-900/60 hover:shadow-2xl hover:shadow-red-600/5 ${category.widthClass}`}
               >
                 <div>
                   <h4 className='text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-1'>
@@ -435,9 +440,10 @@ export default function AboutMe() {
 
         {/* STATS & SCROLL ARROW */}
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={isMounted ? { opacity: 1 } : {}}
-          viewport={{ once: true }}
+          variants={fadeIn}
+          initial='hidden'
+          whileInView='visible'
+          viewport={VIEWPORT}
           className='flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-slate-100 dark:border-slate-800 gap-8'
         >
           <div className='flex flex-row gap-10 items-center'>
@@ -464,7 +470,7 @@ export default function AboutMe() {
             className='group flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-red-600 hover:text-red-700 transition-all'
           >
             Explore Projects
-            <div className='p-2.5 bg-red-50 dark:bg-red-950/30 rounded-full group-hover:bg-red-600 group-hover:text-white group-hover:-translate-y-1 transition-all shadow-sm'>
+            <div className='p-2.5 bg-red-50 dark:bg-red-950/30 rounded-full group-hover:bg-red-600 group-hover:text-white group-hover:translate-y-1 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-sm'>
               <ChevronRight size={16} className='rotate-90' />
             </div>
           </a>

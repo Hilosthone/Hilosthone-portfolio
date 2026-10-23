@@ -210,109 +210,96 @@
 
 'use client'
 
-import { useState, useEffect } from 'react' // Added for Hydration Guard & Typing effect
-import { motion, Variants } from 'framer-motion' // Properly imported Variants
+import { useEffect, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import Image from 'next/image'
 import avartar from '../../src/public/Banner.png'
 import { FaTwitter, FaLinkedinIn, FaGithub, FaInstagram } from 'react-icons/fa'
 import { ArrowRight, Mail } from 'lucide-react'
 import Magnetic from './Magnetic'
-import { DURATION, EASE_OUT, SPRING } from '@/lib/animations'
+import HeroVisual from './hero/HeroVisual'
+import { PRESS, SPRING } from '@/lib/animations'
 
-// Defined Variants outside the component to keep the render function clean
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
-    },
-  },
-}
+const TITLES = [
+  'Full-Stack Developer',
+  'Mobile Application Developer',
+  'AI Engineer',
+]
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: DURATION.slow,
-      ease: EASE_OUT,
-    },
+const socialLinks = [
+  {
+    icon: <FaGithub />,
+    href: 'https://github.com/Hilosthone',
+    label: 'GitHub',
   },
+  {
+    icon: <FaLinkedinIn />,
+    href: 'https://www.linkedin.com/in/hilosthone/',
+    label: 'LinkedIn',
+  },
+  {
+    icon: <FaTwitter />,
+    href: 'https://x.com/Hilosthone1',
+    label: 'Twitter',
+  },
+  {
+    icon: <FaInstagram />,
+    href: 'https://www.instagram.com/hilosthone',
+    label: 'Instagram',
+  },
+]
+
+// Entrance timeline (ms) — CSS-driven so it runs from first paint
+const delay = (ms: number) =>
+  ({ '--rise-delay': `${ms}ms` }) as React.CSSProperties
+
+/**
+ * Typing/deleting title loop, isolated so its 100ms ticks only re-render
+ * this line rather than the whole hero. Screen readers get the full list once.
+ */
+const TypingTitle = () => {
+  const reduceMotion = useReducedMotion()
+  const [index, setIndex] = useState(0)
+  const [text, setText] = useState('')
+  const [deleting, setDeleting] = useState(false)
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setText(TITLES.join(' · '))
+      return
+    }
+
+    const full = TITLES[index]
+    const finished = !deleting && text === full
+    const timer = setTimeout(
+      () => {
+        if (finished) setDeleting(true)
+        else if (deleting && text === '') {
+          setDeleting(false)
+          setIndex((prev) => (prev + 1) % TITLES.length)
+        } else setText(full.substring(0, text.length + (deleting ? -1 : 1)))
+      },
+      finished ? 2000 : deleting ? 100 : 150
+    )
+    return () => clearTimeout(timer)
+  }, [text, deleting, index, reduceMotion])
+
+  return (
+    <p className='text-xl md:text-2xl font-semibold text-slate-700 dark:text-slate-200'>
+      <span className='sr-only'>{TITLES.join(', ')}</span>
+      <span aria-hidden>
+        {text}
+        {!reduceMotion && (
+          <span className='animate-pulse text-red-600 dark:text-red-500 font-bold ml-1'>
+            |
+          </span>
+        )}
+      </span>
+    </p>
+  )
 }
 
 const Hero = () => {
-  const [isMounted, setIsMounted] = useState(false)
-
-  // Typing Effect States
-  const titles = [
-    'Full-Stack Developer',
-    'Mobile Application Developer',
-    'AI Engineer',
-  ]
-  const [currentTitleIndex, setCurrentTitleIndex] = useState(0)
-  const [currentText, setCurrentText] = useState('')
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [typingSpeed, setTypingSpeed] = useState(150)
-
-  // Ensures animations only trigger on the client to prevent Hydration errors
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  // Typing & Deleting Logic Loop
-  useEffect(() => {
-    const fullText = titles[currentTitleIndex]
-
-    const handleTyping = () => {
-      if (!isDeleting) {
-        // Typing forward
-        setCurrentText(fullText.substring(0, currentText.length + 1))
-        // Speed up a bit when finishing words
-        if (currentText === fullText) {
-          setTimeout(() => setIsDeleting(true), 2000) // Pause at full word
-          setTypingSpeed(100)
-        }
-      } else {
-        // Deleting backward
-        setCurrentText(fullText.substring(0, currentText.length - 1))
-        if (currentText === '') {
-          setIsDeleting(false)
-          setCurrentTitleIndex((prev) => (prev + 1) % titles.length)
-          setTypingSpeed(150)
-        }
-      }
-    }
-
-    const timer = setTimeout(handleTyping, typingSpeed)
-    return () => clearTimeout(timer)
-  }, [currentText, isDeleting, currentTitleIndex, typingSpeed, titles])
-
-  const socialLinks = [
-    {
-      icon: <FaGithub />,
-      href: 'https://github.com/Hilosthone',
-      label: 'GitHub',
-    },
-    {
-      icon: <FaLinkedinIn />,
-      href: 'https://www.linkedin.com/in/hilosthone/',
-      label: 'LinkedIn',
-    },
-    {
-      icon: <FaTwitter />,
-      href: 'https://x.com/Hilosthone1',
-      label: 'Twitter',
-    },
-    {
-      icon: <FaInstagram />,
-      href: 'https://www.instagram.com/hilosthone',
-      label: 'Instagram',
-    },
-  ]
-
   return (
     <section
       id='hero'
@@ -324,44 +311,47 @@ const Hero = () => {
       </div>
 
       {/* ===== Left Content ===== */}
-      <motion.div
-        className='md:w-1/2 space-y-8 text-center md:text-left mt-10 md:mt-0'
-        initial='hidden'
-        animate={isMounted ? 'visible' : 'hidden'}
-        variants={containerVariants}
-      >
+      <div className='relative z-10 md:w-1/2 space-y-8 text-center md:text-left mt-10 md:mt-0'>
         <div className='space-y-4'>
-          <motion.h2
-            variants={itemVariants}
-            className='text-red-600 dark:text-red-500 font-bold tracking-[0.2em] text-sm uppercase'
+          <p
+            className='rise-in text-red-600 dark:text-red-500 font-bold tracking-[0.2em] text-sm uppercase'
+            style={delay(100)}
           >
             Available for hire
-          </motion.h2>
-          <motion.h1
-            variants={itemVariants}
-            className='text-4xl sm:text-5xl lg:text-6xl font-black leading-tight text-slate-900 dark:text-white'
-          >
-            Hello I’m <br />
-            <span className='text-red-600 dark:text-red-500 inline-block'>
-              Hilosthone Sulyman.
+          </p>
+          <h1 className='text-4xl sm:text-5xl lg:text-6xl font-black leading-tight text-slate-900 dark:text-white'>
+            <span className='rise-in inline-block' style={delay(200)}>
+              Hello
+            </span>{' '}
+            <span className='rise-in inline-block' style={delay(280)}>
+              I’m
             </span>
-          </motion.h1>
-          
+            <br />
+            <span className='text-red-600 dark:text-red-500'>
+              <span className='rise-in inline-block' style={delay(380)}>
+                Hilosthone
+              </span>{' '}
+              <span className='rise-in inline-block' style={delay(460)}>
+                Sulyman.
+              </span>
+            </span>
+          </h1>
+
           {/* Typing Title Effect */}
-          <motion.div variants={itemVariants} className='h-10 flex items-center justify-center md:justify-start'>
-            <p className='text-xl md:text-2xl font-semibold text-slate-700 dark:text-slate-200'>
-              <span>{currentText}</span>
-              <span className='animate-pulse text-red-600 dark:text-red-500 font-bold ml-1'>|</span>
-            </p>
-          </motion.div>
+          <div
+            className='rise-in min-h-10 flex items-center justify-center md:justify-start'
+            style={delay(600)}
+          >
+            <TypingTitle />
+          </div>
         </div>
 
-        <motion.p
-          variants={itemVariants}
-          className='text-gray-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed max-w-lg mx-auto md:mx-0'
+        <p
+          className='rise-in text-gray-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed max-w-lg mx-auto md:mx-0'
+          style={delay(700)}
         >
           I specialize in building scalable{' '}
-          <span className='text-slate-900 dark:text-white font-bold'>
+          <span className='mark-in text-slate-900 dark:text-white font-bold'>
             Full-Stack, Mobile, and AI-driven applications
           </span>{' '}
           using the MERN stack, Next.js, FastAPI, and{' '}
@@ -369,47 +359,60 @@ const Hero = () => {
             React Native (Expo) and Flutter (Dart),
           </span>
           . Blending performance-focused logic with intelligent solutions.
-        </motion.p>
+        </p>
 
         {/* Buttons / CTA */}
-        <motion.div
-          variants={itemVariants}
-          className='flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 pt-4'
+        <div
+          className='rise-in flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 pt-4'
+          style={delay(820)}
         >
           <Magnetic>
-            <a
+            <motion.a
               href='#projects'
-              className='flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full font-bold transition-all duration-300 shadow-lg shadow-red-600/20 hover:shadow-xl hover:shadow-red-600/30 active:scale-95 group'
+              whileTap={PRESS}
+              transition={SPRING.snappy}
+              className='group relative isolate overflow-hidden flex items-center gap-2 bg-red-600 text-white px-8 py-4 rounded-full font-bold shadow-lg shadow-red-600/20 hover:shadow-xl hover:shadow-red-600/35 transition-shadow duration-300'
             >
+              {/* Fill sweep */}
+              <span
+                aria-hidden
+                className='absolute inset-0 -z-10 bg-gradient-to-r from-red-700 to-rose-600 -translate-x-[101%] group-hover:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]'
+              />
               View My Work
               <ArrowRight
                 size={18}
                 className='group-hover:translate-x-1 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'
               />
-            </a>
+            </motion.a>
           </Magnetic>
           <Magnetic>
-            <a
+            <motion.a
               href='mailto:hilosthonesulyan@gmail.com'
-              className='group flex items-center gap-2 bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white px-8 py-4 rounded-full font-bold hover:bg-slate-200 dark:hover:bg-white/10 transition-all duration-300 border border-slate-200 dark:border-white/10 active:scale-95'
+              whileTap={PRESS}
+              transition={SPRING.snappy}
+              className='group relative isolate overflow-hidden flex items-center gap-2 bg-slate-100 dark:bg-white/5 text-slate-900 dark:text-white px-8 py-4 rounded-full font-bold border border-slate-200 dark:border-white/10 hover:border-red-600/40 transition-colors duration-300'
             >
+              <span
+                aria-hidden
+                className='absolute inset-0 -z-10 bg-white dark:bg-white/10 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]'
+              />
               <Mail
                 size={18}
-                className='group-hover:-rotate-12 transition-transform duration-300'
+                className='group-hover:-rotate-12 group-hover:text-red-600 transition-[transform,color] duration-300'
               />{' '}
               Let&apos;s Talk
-            </a>
+            </motion.a>
           </Magnetic>
-        </motion.div>
+        </div>
 
         {/* Social Icons */}
-        <motion.div
-          variants={itemVariants}
-          className='flex justify-center md:justify-start space-x-6 pt-6'
+        <div
+          className='rise-in flex justify-center md:justify-start space-x-6 pt-6'
+          style={delay(920)}
         >
-          {socialLinks.map((social, index) => (
+          {socialLinks.map((social) => (
             <motion.a
-              key={index}
+              key={social.label}
               href={social.href}
               target='_blank'
               rel='noopener noreferrer'
@@ -422,20 +425,19 @@ const Hero = () => {
               {social.icon}
             </motion.a>
           ))}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* ===== Right Image ===== */}
-      <motion.div
-        className='md:w-1/2 flex justify-center md:justify-end items-center relative'
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={
-          isMounted ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
-        }
-        transition={{ duration: 1, ease: EASE_OUT }}
+      <div
+        className='pop-in md:w-1/2 flex justify-center md:justify-end items-center relative'
+        style={delay(300)}
       >
         {/* The Glow Effect */}
-        <div className='absolute inset-0 bg-red-600/10 dark:bg-red-500/20 blur-[100px] rounded-full -z-10' />
+        <div className='absolute inset-0 bg-red-600/10 dark:bg-red-500/20 blur-[100px] rounded-full -z-20' />
+
+        {/* 3D Engineering Core — floats in the open space behind the illustration */}
+        <HeroVisual className='absolute -z-10 aspect-square w-[78%] md:w-[90%] max-w-[540px] left-1/2 -translate-x-[62%] md:-translate-x-[60%] lg:-translate-x-[78%] top-1/2 -translate-y-[44%] md:-translate-y-[56%] opacity-70 md:opacity-100' />
 
         {/* Floating Animation for Image */}
         <motion.div
@@ -448,14 +450,19 @@ const Hero = () => {
             alt='Hilosthone Portfolio Banner'
             width={600}
             height={600}
-            className='max-w-[80%] lg:max-w-[90%] h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)]'
+            sizes='(max-width: 768px) 80vw, 45vw'
+            className='w-[600px] max-w-[80%] lg:max-w-[90%] h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)]'
             priority
           />
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Scroll Down Indicator */}
-      <div className='absolute bottom-10 left-1/2 -translate-x-1/2 hidden lg:block'>
+      <a
+        href='#about'
+        aria-label='Scroll to About section'
+        className='absolute bottom-10 left-1/2 -translate-x-1/2 hidden lg:block'
+      >
         <motion.div
           animate={{ y: [0, 12, 0] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
@@ -463,7 +470,7 @@ const Hero = () => {
         >
           <div className='w-1 h-2 bg-red-600 rounded-full' />
         </motion.div>
-      </div>
+      </a>
     </section>
   )
 }

@@ -151,7 +151,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { EASE_OUT, SPRING, VIEWPORT } from '@/lib/animations'
+import TiltCard from './motion/TiltCard'
+import { EASE_OUT, PRESS, SPRING, VIEWPORT } from '@/lib/animations'
 import {
   FaHtml5,
   FaCss3Alt,
@@ -280,48 +281,58 @@ const Skills = () => {
         <div className='space-y-10'>
           {skillCategories.map((group, groupIndex) => (
             <div key={groupIndex} className='space-y-4'>
-              <h3 className='text-xs font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 border-l-2 border-red-600 pl-3'>
+              <h3 className='flex items-baseline gap-3 text-xs font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 border-l-2 border-red-600 pl-3'>
                 {group.category}
+                <span className='text-[9px] tracking-widest text-red-600/70 dark:text-red-500/70'>
+                  {String(group.skills.length).padStart(2, '0')}
+                </span>
               </h3>
 
-              <motion.div
-                className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3'
-                initial='hidden'
-                whileInView='visible'
-                viewport={{ once: true }}
-                variants={{
-                  hidden: {},
-                  visible: { transition: { staggerChildren: 0.03 } },
-                }}
-              >
-                {group.skills.map((skill, index) => (
-                  <motion.div
-                    key={index}
-                    variants={{
-                      hidden: { opacity: 0, y: 10 },
-                      visible: {
-                        opacity: 1,
-                        y: 0,
-                        transition: { duration: 0.4, ease: EASE_OUT },
-                      },
-                    }}
-                    whileHover={{ y: -5, transition: SPRING.snappy }}
-                    whileTap={{ scale: 0.97 }}
-                    className='group relative bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 rounded-xl p-4 flex flex-col items-center justify-center transition-[border-color,box-shadow] duration-300 hover:shadow-lg hover:shadow-red-600/10 hover:border-red-600/30'
-                  >
-                    <div className='text-3xl md:text-4xl relative z-10 transition-all duration-300 group-hover:scale-110'>
-                      {skill.icon}
-                    </div>
+              {/* Cluster panel — a soft light follows the cursor across the group */}
+              <TiltCard max={0} lift={false} className='-m-2 p-2 rounded-2xl'>
+                <motion.div
+                  className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3'
+                  initial='hidden'
+                  whileInView='visible'
+                  viewport={{ once: true }}
+                  variants={{
+                    hidden: {},
+                    visible: { transition: { staggerChildren: 0.03 } },
+                  }}
+                >
+                  {group.skills.map((skill, index) => (
+                    <motion.div
+                      key={index}
+                      variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: {
+                          opacity: 1,
+                          y: 0,
+                          transition: { duration: 0.4, ease: EASE_OUT },
+                        },
+                      }}
+                      whileHover={{ y: -5, transition: SPRING.snappy }}
+                      whileTap={PRESS}
+                      className='group relative bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-white/5 rounded-xl p-4 flex flex-col items-center justify-center transition-[border-color,box-shadow] duration-300 hover:shadow-lg hover:shadow-red-600/10 hover:border-red-600/30'
+                    >
+                      <div className='text-3xl md:text-4xl relative z-10 transition-all duration-300 group-hover:scale-110'>
+                        {skill.icon}
+                      </div>
 
-                    <p className='relative z-10 mt-3 text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white font-black text-[8px] uppercase tracking-wider text-center transition-colors'>
-                      {skill.name}
-                    </p>
+                      <p className='relative z-10 mt-3 text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white font-black text-[8px] uppercase tracking-wider text-center transition-colors'>
+                        {skill.name}
+                      </p>
+                      <span
+                        aria-hidden
+                        className='relative z-10 mt-1.5 h-px w-6 bg-red-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'
+                      />
 
-                    {/* Subtle inner glow on hover */}
-                    <div className='absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/[0.03] group-hover:to-transparent rounded-xl transition-all duration-300' />
-                  </motion.div>
-                ))}
-              </motion.div>
+                      {/* Subtle inner glow on hover */}
+                      <div className='absolute inset-0 bg-gradient-to-br from-red-600/0 to-red-600/0 group-hover:from-red-600/[0.03] group-hover:to-transparent rounded-xl transition-all duration-300' />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </TiltCard>
             </div>
           ))}
         </div>

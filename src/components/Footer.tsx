@@ -13,11 +13,20 @@ export default function Footer() {
   ]
 
   const socials = [
-    { icon: <Github size={18} />, href: 'https://github.com/Hilosthone' },
-    { icon: <Twitter size={18} />, href: 'https://x.com/Hilosthone1' },
+    {
+      icon: <Github size={18} />,
+      href: 'https://github.com/Hilosthone',
+      label: 'GitHub',
+    },
+    {
+      icon: <Twitter size={18} />,
+      href: 'https://x.com/Hilosthone1',
+      label: 'Twitter',
+    },
     {
       icon: <Linkedin size={18} />,
       href: 'https://linkedin.com/in/hilosthone',
+      label: 'LinkedIn',
     },
   ]
 
@@ -27,14 +36,18 @@ export default function Footer() {
         <div className='grid grid-cols-1 md:grid-cols-12 gap-12 items-start'>
           {/* Brand & Status - 5 Cols */}
           <div className='md:col-span-5 space-y-5'>
-            <div className='flex items-center space-x-3 group cursor-pointer w-fit'>
+            <a
+              href='#hero'
+              aria-label='Hilosthone — back to top'
+              className='flex items-center space-x-3 group w-fit'
+            >
               <div className='bg-slate-900 dark:bg-white text-white dark:text-black font-black rounded-lg w-9 h-9 flex items-center justify-center transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:-rotate-6'>
                 H
               </div>
               <span className='text-xl font-black tracking-tighter uppercase'>
                 Hilosthone
               </span>
-            </div>
+            </a>
             <p className='text-slate-500 dark:text-slate-400 text-xs md:text-sm max-w-sm leading-relaxed font-medium'>
               Full-Stack & Mobile Engineer focused on building high-performance
               applications and scalable digital infrastructure.
@@ -53,7 +66,7 @@ export default function Footer() {
             <h4 className='font-black text-slate-400 uppercase tracking-[0.2em] text-[10px]'>
               Sitemap
             </h4>
-            <nav className='flex flex-col gap-3'>
+            <nav aria-label='Footer' className='flex flex-col gap-3'>
               {navLinks.map((link) => (
                 <a
                   key={link.name}
@@ -76,20 +89,22 @@ export default function Footer() {
               Connect
             </h4>
             <div className='flex md:justify-end space-x-3'>
-              {socials.map((social, idx) => (
+              {socials.map((social) => (
                 <a
-                  key={idx}
+                  key={social.label}
                   href={social.href}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-white hover:bg-red-600 hover:border-red-600 transition-all duration-300'
+                  aria-label={social.label}
+                  className='block p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-white hover:bg-red-600 hover:border-red-600 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-600/20 active:scale-95 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'
                 >
                   {social.icon}
                 </a>
               ))}
               <a
                 href='mailto:hilosthonesulyan@gmail.com'
-                className='p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-white hover:bg-red-600 hover:border-red-600 transition-all duration-300'
+                aria-label='Email'
+                className='block p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-white hover:bg-red-600 hover:border-red-600 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-600/20 active:scale-95 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'
               >
                 <Mail size={18} />
               </a>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
 import {
   motion,
   useMotionValue,
@@ -8,6 +8,7 @@ import {
   useSpring,
 } from 'framer-motion'
 import { SPRING } from '@/lib/animations'
+import { useFinePointer } from '@/hooks/useFinePointer'
 
 /**
  * Gently pulls its child toward the cursor. Only active on fine pointers
@@ -25,18 +26,10 @@ export default function Magnetic({
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
-  const [finePointer, setFinePointer] = useState(false)
+  const finePointer = useFinePointer()
 
   const x = useSpring(useMotionValue(0), SPRING.magnetic)
   const y = useSpring(useMotionValue(0), SPRING.magnetic)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(hover: hover) and (pointer: fine)')
-    const update = () => setFinePointer(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
 
   const enabled = finePointer && !reduceMotion
 

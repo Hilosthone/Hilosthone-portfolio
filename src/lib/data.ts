@@ -1,11 +1,11 @@
 // Portfolio project data — kept separate from presentation in Projects.tsx
 import type { StaticImageData } from 'next/image'
 
-import dsaImg from '../public/dsatute.png'
-import industryeImg from '../public/industrye.png'
-import gleamlearnImg from '../public/gleamlearn.png'
-import techDiveImg from '../public/techDive.png'
-import twitterCloneImg from '../public/TwitterClone.png'
+import dsaImg from '../public/dsatute.webp'
+import industryeImg from '../public/industrye.webp'
+import gleamlearnImg from '../public/gleamlearn.webp'
+import techDiveImg from '../public/techDive.webp'
+import twitterCloneImg from '../public/TwitterClone.webp'
 
 /**
  * Visually trims browser chrome / OS taskbar out of full-window screenshots

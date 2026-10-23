@@ -18,11 +18,11 @@ const links = [
 ]
 
 export default function Header() {
-  const { theme, setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState<string>('about')
+  const [activeSection, setActiveSection] = useState<string>('')
 
   // Scroll Progress Logic
   const { scrollYProgress } = useScroll()
@@ -42,6 +42,8 @@ export default function Header() {
       setIsScrolled(window.scrollY > 50)
       const scrollPosition = window.scrollY + 120
 
+      // No pill while in the hero (or a section without a nav link)
+      let current = ''
       links.forEach((link) => {
         const el = document.getElementById(link.href.substring(1))
         if (
@@ -49,9 +51,10 @@ export default function Header() {
           scrollPosition >= el.offsetTop &&
           scrollPosition < el.offsetTop + el.offsetHeight
         ) {
-          setActiveSection(el.id)
+          current = el.id
         }
       })
+      setActiveSection(current)
     }
 
     // Throttle to one measurement per animation frame
@@ -77,7 +80,9 @@ export default function Header() {
     return () => window.removeEventListener('keydown', onKey)
   }, [menuOpen])
 
-  if (!mounted) return null
+  // Theme is unknown during SSR — render a neutral icon until mounted so the
+  // header itself can paint immediately without a hydration mismatch
+  const isDark = mounted && resolvedTheme === 'dark'
 
   return (
     <>
@@ -103,17 +108,23 @@ export default function Header() {
           `}
         >
           {/* Logo */}
-          <a href='#' className='group flex items-center gap-2'>
+          <a
+            href='#hero'
+            aria-label='Hilosthone — back to top'
+            className='group flex items-center gap-2'
+          >
             <div className='w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-red-500/20 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-12 group-hover:scale-105'>
               H
             </div>
-            <h1 className='text-lg font-bold tracking-tight text-slate-900 dark:text-white'>
+            <span className='text-lg font-bold tracking-tight text-slate-900 dark:text-white'>
               HILOSTHONE
-            </h1>
+            </span>
           </a>
 
           {/* Desktop Nav */}
-          <nav className='hidden lg:flex items-center gap-1 bg-slate-100/50 dark:bg-white/5 p-1 rounded-full border border-slate-200/20 dark:border-white/5'>
+          <nav
+            aria-label='Primary'
+            className='hidden lg:flex items-center gap-1 bg-slate-100/50 dark:bg-white/5 p-1 rounded-full border border-slate-200/20 dark:border-white/5'>
             {links.map((link) => {
               const isActive = activeSection === link.href.substring(1)
               return (
@@ -143,42 +154,43 @@ export default function Header() {
           {/* Controls */}
           <div className='flex items-center gap-2'>
             <motion.button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              aria-label={
-                theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
-              }
+              onClick={() => setTheme(isDark ? 'light' : 'dark')}
+              aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
               whileTap={{ scale: 0.9 }}
               transition={SPRING.snappy}
               className='p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-colors text-slate-700 dark:text-slate-300 overflow-hidden'
             >
               <AnimatePresence mode='wait' initial={false}>
                 <motion.span
-                  key={theme === 'dark' ? 'sun' : 'moon'}
+                  key={isDark ? 'sun' : 'moon'}
                   initial={{ rotate: -90, opacity: 0, scale: 0.6 }}
                   animate={{ rotate: 0, opacity: 1, scale: 1 }}
                   exit={{ rotate: 90, opacity: 0, scale: 0.6 }}
                   transition={{ duration: 0.25, ease: EASE_OUT }}
                   className='block'
                 >
-                  {theme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
+                  {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
                 </motion.span>
               </AnimatePresence>
             </motion.button>
 
-            <Magnetic className='hidden sm:inline-flex' strength={0.2}>
-              <a
-                href='https://docs.google.com/document/d/13WtzPaF3GVk0-ZhLvyvf--6h8UD84fq2bAqGim5_g0M/edit'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-black px-4 py-2 rounded-full font-bold text-xs hover:bg-red-600 dark:hover:bg-red-500 hover:text-white transition-[background-color,color,transform] duration-300 group shadow-lg active:scale-95'
-              >
-                Resume{' '}
-                <Download
-                  size={14}
-                  className='group-hover:translate-y-0.5 transition-transform duration-300'
-                />
-              </a>
-            </Magnetic>
+            {/* Wrapper owns visibility — Magnetic's own inline-flex would override `hidden` */}
+            <div className='hidden sm:block'>
+              <Magnetic strength={0.2}>
+                <a
+                  href='https://docs.google.com/document/d/13WtzPaF3GVk0-ZhLvyvf--6h8UD84fq2bAqGim5_g0M/edit'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='flex items-center gap-2 bg-slate-900 dark:bg-white text-white dark:text-black px-4 py-2 rounded-full font-bold text-xs hover:bg-red-600 dark:hover:bg-red-500 hover:text-white transition-[background-color,color,transform] duration-300 group shadow-lg active:scale-95'
+                >
+                  Resume{' '}
+                  <Download
+                    size={14}
+                    className='group-hover:translate-y-0.5 transition-transform duration-300'
+                  />
+                </a>
+              </Magnetic>
+            </div>
 
             <button
               onClick={() => setMenuOpen(true)}

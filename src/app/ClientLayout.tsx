@@ -1,8 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react' // Added useState
-import AOS from 'aos'
-import 'aos/dist/aos.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
@@ -18,21 +15,6 @@ export default function ClientLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    // 1. Set mounted to true so we know we are on the client
-    setMounted(true)
-
-    // 2. Initialize AOS with a slight delay or refresh to ensure DOM is ready
-    AOS.init({
-      duration: 1000,
-      once: true,
-      easing: 'ease-in-out',
-      delay: 50, // Slight delay helps sync with React hydration
-    })
-  }, [])
-
   return (
     <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
       {/* Shared motion defaults; honours the OS "reduce motion" setting */}
@@ -57,11 +39,13 @@ export default function ClientLayout({
         <Header />
 
         {/* Floating LinkedIn Portrait */}
-        <div className='fixed bottom-24 right-6 md:bottom-32 md:left-8 z-40'>
+        {/* md:right-auto — otherwise left+right stretch the badge (and its glow) full-width */}
+        <div className='fixed bottom-24 right-6 md:bottom-32 md:right-auto md:left-8 z-40'>
           <Link
             href='https://linkedin.com/in/hilosthone'
             target='_blank'
             rel='noopener noreferrer'
+            aria-label='Hilosthone Sulyman on LinkedIn'
             className='group relative block'
           >
             <span className='absolute -top-1 -right-1 flex h-4 w-4 z-50'>
@@ -74,22 +58,18 @@ export default function ClientLayout({
             <div className='relative w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-white dark:border-slate-800 overflow-hidden shadow-2xl transition-all duration-500 group-hover:scale-110 group-hover:border-red-500'>
               <Image
                 src='/Hilosthone.jpeg'
-                alt='Hilosthone Portrait'
+                alt=''
                 fill
+                sizes='56px'
                 className='object-cover'
-                priority
               />
             </div>
           </Link>
         </div>
 
-        {/* 3. HYDRATION GUARD: 
-            We use a subtle CSS trick. If not mounted, we keep content hidden 
-            or static to prevent AOS from injecting classes too early.
-        */}
-        <main
-          className={`flex-grow w-full max-w-[100vw] overflow-x-hidden min-h-screen ${!mounted ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}`}
-        >
+        {/* Content is visible from first paint; sections handle their own
+            entrance motion, so there is no hydration gate here */}
+        <main className='flex-grow w-full max-w-[100vw] overflow-x-hidden min-h-screen'>
           {children}
         </main>
 

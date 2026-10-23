@@ -135,6 +135,33 @@ section {
   }
 }
 
+/* Idle loops run on the compositor (transform only), never the main thread */
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+.float-y {
+  animation: float-y 4s ease-in-out infinite;
+}
+
+@keyframes scroll-cue {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(12px);
+  }
+}
+.scroll-cue {
+  animation: scroll-cue 1.5s ease-in-out infinite;
+}
+
 /* Respect the OS "reduce motion" setting for CSS-driven animation too
    (Framer Motion is handled via <MotionConfig reducedMotion='user'>) */
 @media (prefers-reduced-motion: reduce) {

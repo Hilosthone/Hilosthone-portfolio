@@ -41,7 +41,7 @@ export default function Footer() {
               aria-label='Hilosthone — back to top'
               className='flex items-center space-x-3 group w-fit'
             >
-              <div className='bg-slate-900 dark:bg-white text-white dark:text-black font-black rounded-lg w-9 h-9 flex items-center justify-center transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:-rotate-6'>
+              <div aria-hidden className='bg-slate-900 dark:bg-white text-white dark:text-black font-black rounded-lg w-9 h-9 flex items-center justify-center transition-all duration-300 group-hover:bg-red-600 group-hover:text-white group-hover:-rotate-6'>
                 H
               </div>
               <span className='text-xl font-black tracking-tighter uppercase'>
@@ -52,7 +52,7 @@ export default function Footer() {
               Full-Stack & Mobile Engineer focused on building high-performance
               applications and scalable digital infrastructure.
             </p>
-            <div className='flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/10 px-3 py-1.5 rounded-md w-fit border border-green-100 dark:border-green-900/30'>
+            <div className='flex items-center space-x-2 text-[10px] font-black uppercase tracking-widest text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/10 px-3 py-1.5 rounded-md w-fit border border-green-100 dark:border-green-900/30'>
               <span className='relative flex h-2 w-2'>
                 <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'></span>
                 <span className='relative inline-flex rounded-full h-2 w-2 bg-green-500'></span>
@@ -63,7 +63,7 @@ export default function Footer() {
 
           {/* Quick Nav - 3 Cols */}
           <div className='md:col-span-3 space-y-4'>
-            <h4 className='font-black text-slate-400 uppercase tracking-[0.2em] text-[10px]'>
+            <h4 className='font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] text-[10px]'>
               Sitemap
             </h4>
             <nav aria-label='Footer' className='flex flex-col gap-3'>
@@ -85,7 +85,7 @@ export default function Footer() {
 
           {/* Socials - 4 Cols */}
           <div className='md:col-span-4 md:text-right space-y-4'>
-            <h4 className='font-black text-slate-400 uppercase tracking-[0.2em] text-[10px]'>
+            <h4 className='font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] text-[10px]'>
               Connect
             </h4>
             <div className='flex md:justify-end space-x-3'>
@@ -96,7 +96,7 @@ export default function Footer() {
                   target='_blank'
                   rel='noopener noreferrer'
                   aria-label={social.label}
-                  className='block p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-white hover:bg-red-600 hover:border-red-600 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-600/20 active:scale-95 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'
+                  className='block p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-500 dark:text-slate-400 hover:text-white hover:bg-red-600 hover:border-red-600 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-600/20 active:scale-95 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'
                 >
                   {social.icon}
                 </a>
@@ -104,7 +104,7 @@ export default function Footer() {
               <a
                 href='mailto:hilosthonesulyan@gmail.com'
                 aria-label='Email'
-                className='block p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-400 hover:text-white hover:bg-red-600 hover:border-red-600 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-600/20 active:scale-95 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'
+                className='block p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 text-slate-500 dark:text-slate-400 hover:text-white hover:bg-red-600 hover:border-red-600 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-600/20 active:scale-95 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]'
               >
                 <Mail size={18} />
               </a>
@@ -114,10 +114,10 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className='mt-16 pt-8 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-6'>
-          <p className='text-[10px] font-bold text-slate-400 uppercase tracking-widest'>
+          <p className='text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest'>
             © {currentYear} Hilosthone Sulyman
           </p>
-          <div className='flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.15em] text-slate-400 bg-slate-50 dark:bg-slate-900/50 px-4 py-2 rounded-full border border-slate-100 dark:border-white/5'>
+          <div className='flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 px-4 py-2 rounded-full border border-slate-100 dark:border-white/5'>
             <span className='text-slate-900 dark:text-slate-200'>Next.js</span>
             <span className='text-slate-300 dark:text-slate-700'>/</span>
             <span className='text-slate-900 dark:text-slate-200'>Tailwind</span>

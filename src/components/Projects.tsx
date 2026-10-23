@@ -152,7 +152,7 @@ const SubHeader = ({
       </h3>
     </div>
     {note && (
-      <span className='text-[10px] font-black uppercase tracking-widest text-slate-400'>
+      <span className='text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400'>
         {note}
       </span>
     )}
@@ -172,6 +172,8 @@ const ProjectCard = ({
   featured?: boolean
 }) => {
   const isEven = index % 2 === 1
+  // Featured rows follow the section h2; "More Builds" rows follow an h3
+  const Title = featured ? 'h3' : 'h4'
 
   return (
     <motion.article
@@ -249,15 +251,15 @@ const ProjectCard = ({
               </span>
             )}
           </div>
-          <h4 className='text-2xl md:text-3xl font-black tracking-tighter text-slate-900 dark:text-white'>
+          <Title className='text-2xl md:text-3xl font-black tracking-tighter text-slate-900 dark:text-white'>
             {project.title}
-          </h4>
+          </Title>
           {project.tagline && (
             <p className='text-sm font-bold text-slate-500 dark:text-slate-400 italic'>
               {project.tagline}
             </p>
           )}
-          <p className='text-[10px] font-black uppercase tracking-widest text-slate-400 pt-1'>
+          <p className='text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 pt-1'>
             {project.category}
           </p>
         </div>
@@ -270,7 +272,7 @@ const ProjectCard = ({
 
         {project.role && (
           <p className='text-xs font-bold text-slate-900 dark:text-white'>
-            <span className='text-slate-400 uppercase tracking-widest text-[10px] font-black mr-2'>
+            <span className='text-slate-500 dark:text-slate-400 uppercase tracking-widest text-[10px] font-black mr-2'>
               Role
             </span>
             {project.role}
@@ -429,7 +431,7 @@ const GithubAction = ({ project }: { project: Project }) => {
 
   if (project.githubPrivate) {
     return (
-      <span className='inline-flex items-center gap-2 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400'>
+      <span className='inline-flex items-center gap-2 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400'>
         <Lock size={12} /> Private Repo
       </span>
     )

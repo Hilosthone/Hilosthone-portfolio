@@ -281,9 +281,9 @@ const Skills = () => {
         <div className='space-y-10'>
           {skillCategories.map((group, groupIndex) => (
             <div key={groupIndex} className='space-y-4'>
-              <h3 className='flex items-baseline gap-3 text-xs font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 border-l-2 border-red-600 pl-3'>
+              <h3 className='flex items-baseline gap-3 text-xs font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 border-l-2 border-red-600 pl-3'>
                 {group.category}
-                <span className='text-[9px] tracking-widest text-red-600/70 dark:text-red-500/70'>
+                <span className='text-[9px] tracking-widest text-red-600 dark:text-red-500'>
                   {String(group.skills.length).padStart(2, '0')}
                 </span>
               </h3>

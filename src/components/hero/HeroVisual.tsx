@@ -26,7 +26,10 @@ function canRenderWebGL() {
   const nav = navigator as DeviceNavigator
   if (nav.connection?.saveData) return false
 
+  // Phones keep the SVG: touch can't steer the sculpture anyway, so the real-
+  // time scene would only cost battery, data and main-thread time
   const coarse = window.matchMedia('(pointer: coarse)').matches
+  if (coarse && window.matchMedia('(max-width: 767px)').matches) return false
   if (coarse && ((nav.hardwareConcurrency ?? 8) <= 4 || (nav.deviceMemory ?? 8) < 4))
     return false
 
@@ -49,7 +52,6 @@ export default function HeroVisual({ className = '' }: { className?: string }) {
   const { resolvedTheme } = useTheme()
   const [mode, setMode] = useState<Mode>('static')
   const [ready, setReady] = useState(false)
-  const [maxDpr, setMaxDpr] = useState(1.5)
 
   useEffect(() => {
     if (reduceMotion || !canRenderWebGL()) {
@@ -58,16 +60,24 @@ export default function HeroVisual({ className = '' }: { className?: string }) {
       return
     }
 
-    // Phones get native-ish resolution; the sculpture is soft anyway
-    if (window.matchMedia('(max-width: 767px)').matches) setMaxDpr(1)
-
+    // Wait for the page to finish loading, then for a genuinely idle moment,
+    // so the 3D chunk never competes with hydration or first interaction
+    let idleId = 0
+    let timerId = 0
     const start = () => setMode('webgl')
-    if ('requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(start, { timeout: 1500 })
-      return () => window.cancelIdleCallback(id)
+    const scheduleIdle = () => {
+      if ('requestIdleCallback' in window) idleId = window.requestIdleCallback(start)
+      else timerId = setTimeout(start, 1000) as unknown as number
     }
-    const id = setTimeout(start, 300)
-    return () => clearTimeout(id)
+
+    if (document.readyState === 'complete') scheduleIdle()
+    else window.addEventListener('load', scheduleIdle, { once: true })
+
+    return () => {
+      window.removeEventListener('load', scheduleIdle)
+      if (idleId) window.cancelIdleCallback(idleId)
+      if (timerId) clearTimeout(timerId)
+    }
   }, [reduceMotion])
 
   const fallBack = () => {
@@ -93,7 +103,6 @@ export default function HeroVisual({ className = '' }: { className?: string }) {
         >
           <EngineeringCore
             dark={resolvedTheme === 'dark'}
-            maxDpr={maxDpr}
             onReady={() => setReady(true)}
             onLost={fallBack}
           />

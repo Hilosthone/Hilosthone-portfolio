@@ -93,12 +93,10 @@ export default function Header() {
       />
 
       <header className='fixed top-0 left-0 w-full z-50 flex justify-center p-4 transition-all duration-300'>
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, ease: EASE_OUT }}
+        {/* CSS entrance — visible from first paint instead of after hydration */}
+        <div
           className={`
-            relative flex items-center justify-between w-full max-w-6xl px-6 py-2.5
+            rise-in relative flex items-center justify-between w-full max-w-6xl px-6 py-2.5
             transition-all duration-500 ease-in-out
             ${
               isScrolled
@@ -113,7 +111,7 @@ export default function Header() {
             aria-label='Hilosthone — back to top'
             className='group flex items-center gap-2'
           >
-            <div className='w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-red-500/20 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-12 group-hover:scale-105'>
+            <div aria-hidden className='w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-red-500/20 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-12 group-hover:scale-105'>
               H
             </div>
             <span className='text-lg font-bold tracking-tight text-slate-900 dark:text-white'>
@@ -201,7 +199,7 @@ export default function Header() {
               <Menu size={24} />
             </button>
           </div>
-        </motion.div>
+        </div>
       </header>
 
       {/* Mobile Sidebar (Kept consistent with your last update) */}
@@ -226,7 +224,7 @@ export default function Header() {
               className='fixed top-0 right-0 h-full w-[300px] bg-white dark:bg-[#0f172a] z-[70] shadow-2xl p-6 lg:hidden flex flex-col'
             >
               <div className='flex justify-between items-center mb-8 px-2'>
-                <span className='font-black text-xs tracking-widest text-slate-400'>
+                <span className='font-black text-xs tracking-widest text-slate-500 dark:text-slate-400'>
                   MENU
                 </span>
                 <button
@@ -303,7 +301,7 @@ export default function Header() {
                   Download Resume <Download size={18} />
                 </a>
                 <div className='text-center'>
-                  <p className='text-[10px] text-slate-400 uppercase tracking-widest font-bold'>
+                  <p className='text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold'>
                     Get In Touch
                   </p>
                   <p className='text-sm font-medium dark:text-white mt-1'>

@@ -345,7 +345,7 @@ export default function TestimonialCarousel() {
 
           {/* Moderate Controls Bar */}
           <div className='flex flex-row justify-between items-center mt-10 pt-6 border-t border-slate-200 dark:border-white/10'>
-            <div className='flex space-x-2'>
+            <div className='flex'>
               {testimonials.map((_, index) => (
                 <button
                   key={index}
@@ -355,12 +355,16 @@ export default function TestimonialCarousel() {
                   }}
                   aria-label={`Show testimonial ${index + 1} of ${testimonials.length}`}
                   aria-current={index === current ? 'true' : undefined}
-                  className={`h-1 rounded-full transition-all duration-500 ${
-                    index === current
-                      ? 'bg-red-600 w-8'
-                      : 'bg-slate-300 dark:bg-slate-800 w-2'
-                  }`}
-                />
+                  className='group h-6 min-w-6 flex items-center justify-center'
+                >
+                  <span
+                    className={`block h-1 rounded-full transition-all duration-500 ${
+                      index === current
+                        ? 'bg-red-600 w-8'
+                        : 'bg-slate-300 dark:bg-slate-700 w-2 group-hover:bg-red-600/50'
+                    }`}
+                  />
+                </button>
               ))}
             </div>
 

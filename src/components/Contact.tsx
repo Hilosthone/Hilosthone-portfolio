@@ -128,9 +128,9 @@ export default function Contact() {
                     />
                   </div>
                   <div>
-                    <h4 className='font-black text-slate-900 dark:text-white uppercase tracking-widest text-[10px]'>
+                    <h3 className='font-black text-slate-900 dark:text-white uppercase tracking-widest text-[10px]'>
                       Email
-                    </h4>
+                    </h3>
                     <p className='text-xs font-bold text-slate-500 dark:text-slate-400 group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors'>
                       hilosthonesulyan@gmail.com
                     </p>
@@ -148,9 +148,9 @@ export default function Contact() {
                   />
                 </div>
                 <div>
-                  <h4 className='font-black text-slate-900 dark:text-white uppercase tracking-widest text-[10px]'>
+                  <h3 className='font-black text-slate-900 dark:text-white uppercase tracking-widest text-[10px]'>
                     Location
-                  </h4>
+                  </h3>
                   <p className='text-xs font-bold text-slate-500 dark:text-slate-400'>
                     Kwara, Nigeria (Remote)
                   </p>
@@ -199,7 +199,7 @@ export default function Contact() {
                     <div className='group/field space-y-1.5'>
                       <label
                         htmlFor='contact-name'
-                        className='text-[9px] font-black uppercase tracking-widest text-slate-400 group-focus-within/field:text-red-600 transition-colors ml-1'
+                        className='text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 group-focus-within/field:text-red-600 transition-colors ml-1'
                       >
                         Name
                       </label>
@@ -215,7 +215,7 @@ export default function Contact() {
                     <div className='group/field space-y-1.5'>
                       <label
                         htmlFor='contact-email'
-                        className='text-[9px] font-black uppercase tracking-widest text-slate-400 group-focus-within/field:text-red-600 transition-colors ml-1'
+                        className='text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 group-focus-within/field:text-red-600 transition-colors ml-1'
                       >
                         Email
                       </label>
@@ -232,7 +232,7 @@ export default function Contact() {
                   <div className='group/field space-y-1.5'>
                     <label
                       htmlFor='contact-subject'
-                      className='text-[9px] font-black uppercase tracking-widest text-slate-400 group-focus-within/field:text-red-600 transition-colors ml-1'
+                      className='text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 group-focus-within/field:text-red-600 transition-colors ml-1'
                     >
                       Subject
                     </label>
@@ -248,7 +248,7 @@ export default function Contact() {
                   <div className='group/field space-y-1.5'>
                     <label
                       htmlFor='contact-message'
-                      className='text-[9px] font-black uppercase tracking-widest text-slate-400 group-focus-within/field:text-red-600 transition-colors ml-1'
+                      className='text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 group-focus-within/field:text-red-600 transition-colors ml-1'
                     >
                       Message
                     </label>

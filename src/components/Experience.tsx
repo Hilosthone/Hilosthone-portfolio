@@ -216,7 +216,7 @@ export default function Experience() {
                         </h3>
 
                         <div className='flex items-center gap-2 mb-4'>
-                          <span className='text-[11px] font-bold text-slate-400 uppercase tracking-wider italic'>
+                          <span className='text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider italic'>
                             @ {exp.company}
                           </span>
                         </div>

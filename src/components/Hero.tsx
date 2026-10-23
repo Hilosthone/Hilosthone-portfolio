@@ -356,7 +356,7 @@ const Hero = () => {
           </span>{' '}
           using the MERN stack, Next.js, FastAPI, and{' '}
           <span className='text-slate-900 dark:text-white font-bold'>
-            React Native (Expo) and Flutter (Dart),
+            React Native (Expo) and Flutter (Dart)
           </span>
           . Blending performance-focused logic with intelligent solutions.
         </p>
@@ -420,7 +420,7 @@ const Hero = () => {
               whileHover={{ y: -4, scale: 1.1 }}
               whileTap={{ scale: 0.92 }}
               transition={SPRING.snappy}
-              className='text-slate-400 hover:text-red-600 dark:hover:text-red-500 transition-colors text-2xl'
+              className='text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-500 transition-colors text-2xl'
             >
               {social.icon}
             </motion.a>
@@ -440,11 +440,7 @@ const Hero = () => {
         <HeroVisual className='absolute -z-10 aspect-square w-[78%] md:w-[90%] max-w-[540px] left-1/2 -translate-x-[62%] md:-translate-x-[60%] lg:-translate-x-[78%] top-1/2 -translate-y-[44%] md:-translate-y-[56%] opacity-70 md:opacity-100' />
 
         {/* Floating Animation for Image */}
-        <motion.div
-          animate={{ y: [0, -15, 0] }}
-          transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-          className='relative w-full flex justify-center md:justify-end'
-        >
+        <div className='float-y relative w-full flex justify-center md:justify-end'>
           <Image
             src={avartar}
             alt='Hilosthone Portfolio Banner'
@@ -454,7 +450,7 @@ const Hero = () => {
             className='w-[600px] max-w-[80%] lg:max-w-[90%] h-auto object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)]'
             priority
           />
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll Down Indicator */}
@@ -463,13 +459,9 @@ const Hero = () => {
         aria-label='Scroll to About section'
         className='absolute bottom-10 left-1/2 -translate-x-1/2 hidden lg:block'
       >
-        <motion.div
-          animate={{ y: [0, 12, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
-          className='w-6 h-10 border-2 border-slate-300 dark:border-slate-700 rounded-full flex justify-center p-1'
-        >
+        <div className='scroll-cue w-6 h-10 border-2 border-slate-300 dark:border-slate-700 rounded-full flex justify-center p-1'>
           <div className='w-1 h-2 bg-red-600 rounded-full' />
-        </motion.div>
+        </div>
       </a>
     </section>
   )

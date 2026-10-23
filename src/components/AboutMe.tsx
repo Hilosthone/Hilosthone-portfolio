@@ -375,9 +375,9 @@ export default function AboutMe() {
         {/* STACK SLIDER / WRAPPER */}
         <div className='relative group'>
           <div className='lg:hidden flex justify-between items-center mb-3 px-1'>
-            <h4 className='text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 font-mono'>
+            <h3 className='text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400 font-mono'>
               Technical Arsenal
-            </h4>
+            </h3>
             <div className='flex gap-2'>
               <button
                 onClick={() => scroll('left')}
@@ -412,10 +412,10 @@ export default function AboutMe() {
                 className={`min-w-[90%] sm:min-w-[48%] lg:min-w-0 snap-center bg-slate-50 dark:bg-slate-900/40 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4 transition-[border-color,background-color,box-shadow,translate] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hover:-translate-y-1 hover:border-red-600/40 hover:bg-white dark:hover:bg-slate-900/60 hover:shadow-2xl hover:shadow-red-600/5 ${category.widthClass}`}
               >
                 <div>
-                  <h4 className='text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-1'>
+                  <h3 className='text-[10px] font-black uppercase tracking-[0.2em] text-red-600 mb-1'>
                     {category.title}
-                  </h4>
-                  <p className='text-[11px] font-bold text-slate-400 uppercase tracking-tight'>
+                  </h3>
+                  <p className='text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-tight'>
                     {category.description}
                   </p>
                 </div>
@@ -451,7 +451,7 @@ export default function AboutMe() {
               <span className='text-2xl font-black text-slate-900 dark:text-white leading-none'>
                 3+
               </span>
-              <span className='text-[9px] font-black uppercase tracking-widest text-slate-400'>
+              <span className='text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400'>
                 Years Exp
               </span>
             </div>
@@ -459,7 +459,7 @@ export default function AboutMe() {
               <span className='text-2xl font-black text-slate-900 dark:text-white leading-none'>
                 20+
               </span>
-              <span className='text-[9px] font-black uppercase tracking-widest text-slate-400'>
+              <span className='text-[9px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400'>
                 Shipped
               </span>
             </div>
